@@ -39,3 +39,27 @@ Then open `http://localhost:8000`.
 8. Use the top-right reset control to restore the mockup state.
 
 Record friction, missing actions, terminology issues, and any new use cases before promoting anything into the main project.
+
+
+## Goals Map wireframe
+
+Open `goals-map.html` to test the 8-bit world-map navigation concept.
+
+The mockup contains five goal phases:
+
+- Foundation
+- Health
+- Career
+- Wealth
+- Legacy
+
+Phone UX workflow:
+
+1. Tap each island and verify the selected phase card updates.
+2. Tap milestone nodes and verify progress changes.
+3. Open a phase with the arrow button and toggle milestones from the detail dialog.
+4. Reload the page and verify map progress persists.
+5. Reset the map using the top-right reset button.
+6. Use the home control to return to the Today mockup.
+
+The page also exposes a read-only `window.__LEGACY_MOCKUP_DEBUG__` object to make browser-side QA and DOM inspection easier.
