@@ -95,7 +95,7 @@ function selectPhase(phase) {
 }
 
 function toggleMilestone(phase, index) {
-  if (!phaseConfig[phase]) return;
+  if (!phaseConfig[phase] || !Number.isInteger(index)) return;
   state.selectedPhase = phase;
   state.completed[phase][index] = !state.completed[phase][index];
   render();
@@ -104,6 +104,7 @@ function toggleMilestone(phase, index) {
 function getPhaseProgress(phase) {
   const values = state.completed[phase];
   const done = values.filter(Boolean).length;
+
   return {
     done,
     total: values.length,
@@ -121,9 +122,11 @@ function renderMap() {
 
     island.querySelectorAll(".milestone").forEach((button) => {
       const index = Number(button.dataset.index);
-      button.classList.toggle("done", Boolean(values[index]));
-      button.classList.toggle("next", !values[index] && index === firstOpen);
-      button.setAttribute("aria-pressed", String(Boolean(values[index])));
+      const done = Boolean(values[index]);
+
+      button.classList.toggle("done", done);
+      button.classList.toggle("next", !done && index === firstOpen);
+      button.setAttribute("aria-pressed", String(done));
     });
   }
 }
@@ -152,6 +155,7 @@ function renderDialog() {
   config.milestones.forEach((label, index) => {
     const button = document.createElement("button");
     const completed = state.completed[phase][index];
+
     button.type = "button";
     button.className = "dialog-milestone";
     button.classList.toggle("done", completed);
@@ -163,13 +167,16 @@ function renderDialog() {
       toggleMilestone(phase, index);
       renderDialog();
     });
+
     dialogMilestones.append(button);
   });
 }
 
 function renderDebugBridge() {
+  const milestoneBoxes = [...document.querySelectorAll(".milestone")].map((node) => node.getBoundingClientRect());
+
   window.__LEGACY_MOCKUP_DEBUG__ = {
-    page: "goals-map",
+    page: "goals-map-v2",
     selectedPhase: state.selectedPhase,
     phaseCount: Object.keys(phaseConfig).length,
     milestones: Object.fromEntries(
@@ -178,7 +185,7 @@ function renderDebugBridge() {
     checks: {
       allPhasesRendered: document.querySelectorAll(".island").length === Object.keys(phaseConfig).length,
       allPhaseSelectorsHaveLabels: [...document.querySelectorAll("[data-select-phase]")].every((node) => node.getAttribute("aria-label")),
-      touchTargetsPresent: [...document.querySelectorAll(".milestone")].every((node) => node.getBoundingClientRect().width >= 32),
+      touchTargetsAtLeast44: milestoneBoxes.every((box) => box.width >= 44 && box.height >= 44),
       dialogSupported: typeof phaseDialog.showModal === "function",
       persistenceAvailable: typeof localStorage !== "undefined"
     }
