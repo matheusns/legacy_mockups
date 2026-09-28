@@ -48,7 +48,8 @@ function defaultState() {
 
 function loadState() {
   try {
-    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    const raw = localStorage.getItem(STORAGE_KEY) || sessionStorage.getItem(STORAGE_KEY);
+    const parsed = JSON.parse(raw);
     if (!parsed || !phaseConfig[parsed.selectedPhase] || typeof parsed.completed !== "object") {
       return defaultState();
     }
@@ -85,7 +86,9 @@ const dialogMilestones = document.querySelector("#dialogMilestones");
 const dialogDoneButton = document.querySelector("#dialogDoneButton");
 
 function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  const snapshot = JSON.stringify(state);
+  localStorage.setItem(STORAGE_KEY, snapshot);
+  sessionStorage.setItem(STORAGE_KEY, snapshot);
 }
 
 function selectPhase(phase) {
@@ -216,6 +219,11 @@ openPhaseButton.addEventListener("click", () => {
 });
 
 dialogDoneButton.addEventListener("click", () => phaseDialog.close());
+
+window.addEventListener("pagehide", saveState);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") saveState();
+});
 
 resetMapButton.addEventListener("click", () => {
   const confirmed = window.confirm("Reset Goals Map prototype progress?");
