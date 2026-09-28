@@ -858,3 +858,7 @@ h1 {
     scroll-behavior: auto !important;
   }
 }
+
+/* QA hardening: preserve 44px hit boxes even in the 4-node Career row. */
+.milestone { flex: 0 0 44px; }
+.island-career .milestones { left: 10px; right: 10px; }
