@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4f4f1" />
+  <title>LEGACY Mockup — Today</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">LEGACY · MOCKUP</p>
+        <h1>Today</h1>
+      </div>
+      <button id="resetAllButton" class="icon-button" type="button" aria-label="Reset mockup data" title="Reset mockup data">↺</button>
+    </header>
+
+    <section class="card" aria-labelledby="todo-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">DAILY TODO</p>
+          <h2 id="todo-title">Tasks</h2>
+        </div>
+        <span id="taskSummary" class="pill">0 / 0</span>
+      </div>
+
+      <form id="todoForm" class="todo-form">
+        <input
+          id="todoInput"
+          name="todo"
+          type="text"
+          inputmode="text"
+          autocomplete="off"
+          maxlength="80"
+          placeholder="Add a task..."
+          aria-label="New task"
+          required
+        />
+        <button class="primary-button" type="submit" aria-label="Add task">+</button>
+      </form>
+
+      <ul id="todoList" class="todo-list" aria-live="polite"></ul>
+      <p id="todoEmpty" class="empty-state">No tasks yet. Add the first thing you want to get done.</p>
+    </section>
+
+    <section class="card water-card" aria-labelledby="water-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">HYDRATION</p>
+          <h2 id="water-title">Water</h2>
+        </div>
+        <button id="waterResetButton" class="text-button" type="button">Reset</button>
+      </div>
+
+      <div class="water-progress" aria-label="Water progress">
+        <div class="water-value">
+          <strong id="waterAmount">0</strong>
+          <span>ml</span>
+        </div>
+        <p><span id="waterGlasses">0</span> of <span id="waterGoalGlasses">8</span> glasses</p>
+        <div class="progress-track" aria-hidden="true">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div id="glassGrid" class="glass-grid" aria-label="Daily glasses"></div>
+
+      <div class="water-actions">
+        <button id="removeWaterButton" class="secondary-button" type="button">− 250 ml</button>
+        <button id="addWaterButton" class="primary-action" type="button">+ 250 ml</button>
+      </div>
+    </section>
+
+    <section class="feedback-note">
+      <p><strong>Prototype intent:</strong> tap through the flow on your phone and note what feels slow, unclear, unnecessary, or missing.</p>
+    </section>
+  </main>
+
+  <template id="todoItemTemplate">
+    <li class="todo-item">
+      <label class="todo-main">
+        <input class="todo-checkbox" type="checkbox" />
+        <span class="todo-label"></span>
+      </label>
+      <button class="delete-button" type="button" aria-label="Delete task">×</button>
+    </li>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
