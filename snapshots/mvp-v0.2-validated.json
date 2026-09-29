@@ -1,0 +1,22 @@
+{
+  "artifact": "LEGACY-MOCKUP-MVP-STATE",
+  "version": "0.2",
+  "status": "validated-feedback-candidate",
+  "date": "2026-09-29",
+  "deployment": "https://legacy-mockups.vercel.app/",
+  "source_snapshot": "snapshots/mvp-v0.2.json",
+  "acceptance_result": "PASS",
+  "executed_fvts": 17,
+  "blocking_findings": [],
+  "skills_under_test": [
+    "SK-UX-01","SK-UX-02","SK-UX-03","SK-UX-04","SK-UX-05","SK-UX-06","SK-UX-07","SK-UX-08",
+    "SK-QA-01","SK-PROD-01","SK-AI-01","SK-SEC-01"
+  ],
+  "next_gate": "user_feedback",
+  "prepared_next_suites": [
+    "0.3A productivity-first",
+    "0.3B game-rich progression",
+    "0.4 recovery and planning",
+    "0.5 multi-user and AI governance"
+  ]
+}
