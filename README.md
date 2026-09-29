@@ -63,3 +63,20 @@ Phone UX workflow:
 6. Use the home control to return to the Today mockup.
 
 The page also exposes a read-only `window.__LEGACY_MOCKUP_DEBUG__` object to make browser-side QA and DOM inspection easier.
+
+
+## Integrated MVP 0.1
+
+The production root now serves the integrated mobile MVP with the state-of-the-art shell:
+
+- Today
+- Map
+- Life
+- Insights
+- Me
+
+The original Todo + Water prototype is preserved under `archive/today-v0.1/`.
+
+The thematic map remains available at `/goals-map`.
+
+Mockup experimentation and skill validation are tracked in `docs/MVP_SKILL_TEST_PLAN.md`, and frozen candidate states are stored under `snapshots/`.
