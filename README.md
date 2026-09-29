@@ -82,3 +82,21 @@ The original Todo + Water prototype is preserved under `archive/today-v0.1/`.
 The thematic map remains available at `/goals-map`.
 
 Mockup experimentation and skill validation are tracked in `docs/MVP_SKILL_TEST_PLAN.md`, and frozen candidate states are stored under `snapshots/`.
+
+
+## Geek v0.4 review candidate
+
+The current mockup root is the 32-bit / RPG-inspired UX candidate.
+
+Routes:
+- `/` — Home / RPG HUD
+- `/goals-map` — full-screen pannable/zoomable World Map
+- `/island?phase=career` — Island Goals & Tasks with long/mid/short-term hierarchy
+- `/focus` — Pomodoro Focus Forest
+
+Work-package visual reference:
+- `docs/references/geek-ui-reference-board.webp`
+- `docs/GEEK_UI_WORK_PACKAGES_v0.4.md`
+- `docs/GEEK_UI_FVT_RESULTS_v0.4.md`
+
+State is browser-local under `legacy-geek-v0.4`. This remains a disposable UX prototype and does not imply backend persistence, authentication, or production security.
