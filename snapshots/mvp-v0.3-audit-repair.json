@@ -1,0 +1,10 @@
+{
+  "artifact":"LEGACY-MOCKUP-MVP-STATE",
+  "version":"0.3-audit-repair",
+  "audit":"LEGACY-AUDIT-2026-09-29",
+  "issue":1,
+  "status":"implementation-candidate",
+  "branch":"fix/legacy-audit-2026-09-29",
+  "findings_targeted":["LEG-001","LEG-002","LEG-003","LEG-004","LEG-005","LEG-006","LEG-007","LEG-008","LEG-009","LEG-010","LEG-011","LEG-012","LEG-013","LEG-014","LEG-015"],
+  "production_verification":"pending"
+}

@@ -4,14 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f3f1e9" />
-  <title>LEGACY Mockup — MVP</title>
+  <title>LEGACY Mockup — MVP 0.3 Audit Repair</title>
   <link rel="stylesheet" href="mvp.css" />
 </head>
 <body>
   <main class="app-shell">
     <header class="app-header">
       <div>
-        <p class="eyebrow">LEGACY · MVP 0.2</p>
+        <p class="eyebrow">LEGACY · MVP 0.3 · AUDIT REPAIR</p>
         <h1 id="screenTitle">Today</h1>
       </div>
       <div class="header-actions">
@@ -20,12 +20,17 @@
       </div>
     </header>
 
-    <section id="view-today" class="view active" data-view="today">
-      <article id="recoveryCard" class="notice-card" hidden>
+    <aside class="prototype-boundary" aria-label="Prototype data notice">
+      <strong>Prototype data</strong>
+      <span>Browser-local demo state. No server sync, real integrations, banking data, or live AI calls.</span>
+    </aside>
+
+    <section id="view-today" class="view active" data-view="today" aria-labelledby="screenTitle">
+      <article id="recoveryCard" class="notice-card">
         <div>
           <p class="eyebrow">RECOVERY MODE</p>
           <h2>Resume without resetting progress.</h2>
-          <p>You have unfinished actions from a previous day. Choose what to carry forward.</p>
+          <p>Missed actions keep their history. Resume, reschedule selected items, or intentionally skip them.</p>
         </div>
         <button id="recoverButton" class="small-button" type="button">Review</button>
       </article>
@@ -34,7 +39,7 @@
         <div>
           <p class="eyebrow">NEXT BEST ACTION</p>
           <h2 id="nextActionTitle">Finish architecture notes</h2>
-          <p id="nextActionMeta">Career · 25 min · +20 XP</p>
+          <p id="nextActionMeta">Work · 25 min · +20 XP</p>
         </div>
         <button id="completeNextButton" class="cta-button" type="button">Complete</button>
       </article>
@@ -48,14 +53,22 @@
           <span id="todaySummary" class="pill">0/0</span>
         </div>
         <ul id="actionList" class="action-list"></ul>
-        <button id="addTaskInline" class="secondary-wide" type="button">＋ Add task</button>
+        <button id="addTaskInline" class="secondary-wide" type="button">＋ Add task or habit</button>
+      </article>
+
+      <article id="upcomingCard" class="card" hidden>
+        <div class="section-heading">
+          <div><p class="eyebrow">UPCOMING</p><h2>Rescheduled</h2></div>
+          <span id="upcomingCount" class="pill">0</span>
+        </div>
+        <div id="upcomingList" class="upcoming-list"></div>
       </article>
 
       <article class="card split-card">
         <section>
           <p class="eyebrow">HYDRATION</p>
           <h2><span id="waterAmount">0</span> ml</h2>
-          <p class="subtle"><span id="waterGlasses">0</span>/8 glasses</p>
+          <p class="subtle"><span id="waterGlasses">0</span>/8 glasses · locally logged</p>
           <div class="mini-progress"><span id="waterProgress"></span></div>
           <div class="row-actions">
             <button id="waterMinus" type="button" class="mini-button">−250</button>
@@ -65,22 +78,22 @@
         <section>
           <p class="eyebrow">CONTINUITY</p>
           <h2 id="continuityScore">82%</h2>
-          <p class="subtle">7-day habit strength</p>
+          <p class="subtle">Demo 7-day habit strength</p>
           <div class="continuity-grid" id="continuityGrid" aria-label="Seven day continuity"></div>
         </section>
       </article>
 
       <article class="card compact-card">
         <div>
-          <p class="eyebrow">CALENDAR CONTEXT</p>
+          <p class="eyebrow">CALENDAR CONTEXT · SAMPLE</p>
           <h3>18:30 · Evening run</h3>
-          <p class="subtle">Health · 45 min</p>
+          <p class="subtle">Health · 45 min · not connected to a real calendar</p>
         </div>
         <button class="small-button ghost" type="button" data-open-module="health">Open</button>
       </article>
     </section>
 
-    <section id="view-map" class="view" data-view="map">
+    <section id="view-map" class="view" data-view="map" aria-labelledby="screenTitle">
       <article class="map-preview-card">
         <div class="map-preview-header">
           <div>
@@ -89,6 +102,7 @@
           </div>
           <a class="small-button" href="./goals-map">Explore full map</a>
         </div>
+        <p class="map-note">Both map views use the same browser-local milestone store.</p>
         <div id="phaseStrip" class="phase-strip"></div>
       </article>
       <article class="card">
@@ -99,7 +113,7 @@
       </article>
     </section>
 
-    <section id="view-life" class="view" data-view="life">
+    <section id="view-life" class="view" data-view="life" aria-labelledby="screenTitle">
       <article class="card">
         <div class="section-heading">
           <div>
@@ -118,104 +132,123 @@
       </article>
     </section>
 
-    <section id="view-insights" class="view" data-view="insights">
+    <section id="view-insights" class="view" data-view="insights" aria-labelledby="screenTitle">
       <article class="hero-card insight-hero">
         <div>
-          <p class="eyebrow">THIS WEEK</p>
-          <h2><span id="weeklyCompletion">76</span>% completion</h2>
-          <p class="subtle">Meaningful actions completed across all domains.</p>
+          <p class="eyebrow">LOCAL MOCK METRICS</p>
+          <h2><span id="weeklyCompletion">0</span>% completion</h2>
+          <p class="subtle">Calculated from this browser's editable prototype state.</p>
         </div>
-        <div class="ring" id="completionRing" aria-label="Weekly completion ring"><span id="ringLabel">76%</span></div>
+        <div class="ring" id="completionRing" aria-label="Weekly completion ring"><span id="ringLabel">0%</span></div>
       </article>
       <article class="card">
-        <p class="eyebrow">DOMAIN PROGRESS</p>
+        <div class="section-heading">
+          <div><p class="eyebrow">DOMAIN PROGRESS</p><h2>All supported domains</h2></div>
+          <span class="pill">LOCAL</span>
+        </div>
         <div id="domainBars" class="domain-bars"></div>
       </article>
       <article class="card">
-        <p class="eyebrow">REVIEW SIGNALS</p>
+        <p class="eyebrow">REVIEW SIGNALS · DEMO</p>
         <div class="signal-list">
           <button class="signal-card" type="button" data-signal="recovery">
-            <strong>Recovery opportunity</strong><span>2 habits missed once this week</span>
+            <strong>Recovery opportunity</strong><span>Derived from unresolved prototype actions.</span>
           </button>
           <button class="signal-card" type="button" data-signal="focus">
-            <strong>Focus trend</strong><span>Career completion is up 14%</span>
+            <strong>Focus trend</strong><span>Illustrative signal, not a live analytical model.</span>
           </button>
           <button class="signal-card" type="button" data-signal="finance">
-            <strong>Finance checkpoint</strong><span>Emergency buffer at 63%</span>
+            <strong>Finance checkpoint</strong><span>Uses the visible manual finance assumptions.</span>
           </button>
         </div>
       </article>
     </section>
 
-    <section id="view-me" class="view" data-view="me">
-      <article class="profile-card">
+    <section id="view-me" class="view" data-view="me" aria-labelledby="screenTitle">
+      <article id="lowGameNotice" class="notice-card low-game-notice" hidden>
+        <div>
+          <p class="eyebrow">LOW-GAMIFICATION MODE</p>
+          <h2>Game metrics are hidden.</h2>
+          <p>Today, Life, search, goals, recovery, and settings remain fully available.</p>
+        </div>
+      </article>
+
+      <article class="profile-card game-only">
         <div class="avatar">M</div>
         <div class="profile-copy">
-          <p class="eyebrow">LEVEL <span id="levelValue">7</span></p>
+          <p class="eyebrow">DEMO LEVEL <span id="levelValue">7</span></p>
           <h2>Explorer</h2>
-          <p class="subtle"><span id="xpValue">640</span> / 800 XP</p>
+          <p class="subtle"><span id="xpValue">640</span> / 800 XP · browser-local fixture</p>
           <div class="mini-progress"><span id="xpProgress"></span></div>
         </div>
       </article>
 
-      <article class="card">
+      <article class="card game-only">
         <div class="section-heading">
-          <div><p class="eyebrow">SKILLS</p><h2>Identity growth</h2></div>
-          <span class="pill">XP-linked</span>
+          <div><p class="eyebrow">SKILLS · LOCAL DEMO</p><h2>XP-linked identity growth</h2></div>
+          <span class="pill">Mapped</span>
         </div>
         <div id="skillGrid" class="skill-grid"></div>
       </article>
 
-      <article class="card">
+      <article class="card game-only">
         <div class="section-heading">
-          <div><p class="eyebrow">REWARDS</p><h2>Optional economy</h2></div>
+          <div><p class="eyebrow">REWARDS · LOCAL DEMO</p><h2>Optional economy</h2></div>
           <span class="pill">🪙 <span id="coinValue">120</span></span>
         </div>
         <div id="rewardList" class="reward-list"></div>
       </article>
 
       <article class="card settings-list">
-        <button id="lowGameToggle" class="settings-row" type="button"><span>Low-gamification mode</span><strong id="lowGameStatus">Off</strong></button>
+        <button id="lowGameToggle" class="settings-row" type="button" aria-pressed="false"><span>Low-gamification mode</span><strong id="lowGameStatus">Off</strong></button>
         <button id="workspaceButton" class="settings-row" type="button"><span>Workspace & family</span><strong>Private ›</strong></button>
-        <button id="featureRequestButton" class="settings-row" type="button"><span>Suggest a feature</span><strong>AI draft ›</strong></button>
+        <button id="featureRequestButton" class="settings-row" type="button"><span>Suggest a feature</span><strong>Simulated AI draft ›</strong></button>
       </article>
     </section>
 
     <nav class="tab-bar" aria-label="Primary navigation">
-      <button class="tab active" type="button" data-target="today"><span>●</span>Today</button>
-      <button class="tab" type="button" data-target="map"><span>◆</span>Map</button>
-      <button class="tab" type="button" data-target="life"><span>▦</span>Life</button>
-      <button class="tab" type="button" data-target="insights"><span>▥</span>Insights</button>
-      <button class="tab" type="button" data-target="me"><span>◎</span>Me</button>
+      <button class="tab active" type="button" data-target="today" aria-current="page"><span aria-hidden="true">●</span>Today</button>
+      <button class="tab" type="button" data-target="map"><span aria-hidden="true">◆</span>Map</button>
+      <button class="tab" type="button" data-target="life"><span aria-hidden="true">▦</span>Life</button>
+      <button class="tab" type="button" data-target="insights"><span aria-hidden="true">▥</span>Insights</button>
+      <button class="tab" type="button" data-target="me"><span aria-hidden="true">◎</span>Me</button>
     </nav>
   </main>
 
-  <dialog id="appDialog" class="app-dialog">
-    <form method="dialog"><button class="dialog-close" value="close" aria-label="Close">×</button></form>
+  <dialog id="appDialog" class="app-dialog" aria-labelledby="appDialogTitle">
+    <form method="dialog" class="dialog-close-form"><button class="dialog-close" value="close" aria-label="Close dialog">×</button></form>
+    <p class="eyebrow" id="appDialogEyebrow">MVP FLOW</p>
+    <h2 id="appDialogTitle">Details</h2>
     <div id="dialogBody"></div>
   </dialog>
 
-  <dialog id="quickAddDialog" class="app-dialog">
-    <form method="dialog"><button class="dialog-close" value="close" aria-label="Close">×</button></form>
+  <dialog id="quickAddDialog" class="app-dialog" aria-labelledby="quickAddDialogTitle">
+    <form method="dialog" class="dialog-close-form"><button class="dialog-close" value="close" aria-label="Close quick add">×</button></form>
     <p class="eyebrow">QUICK ADD</p>
-    <h2>Create action</h2>
+    <h2 id="quickAddDialogTitle">Create action</h2>
     <form id="quickAddForm" class="form-stack">
-      <label>Title<input id="quickAddTitle" required maxlength="80" placeholder="What needs to happen?" /></label>
-      <label>Type<select id="quickAddType"><option value="task">Task</option><option value="habit">Habit</option></select></label>
-      <label>Domain<select id="quickAddDomain"><option>Personal</option><option>Work</option><option>Health</option><option>Finance</option><option>Learning</option></select></label>
+      <label for="quickAddTitle">Title</label>
+      <input id="quickAddTitle" required maxlength="80" placeholder="What needs to happen?" />
+      <label for="quickAddType">Type</label>
+      <select id="quickAddType"><option value="task">Task</option><option value="habit">Habit</option></select>
+      <label for="quickAddDomain">Domain</label>
+      <select id="quickAddDomain"></select>
       <button class="cta-button full" type="submit">Add to Today</button>
     </form>
   </dialog>
 
-  <dialog id="searchDialog" class="app-dialog">
-    <form method="dialog"><button class="dialog-close" value="close" aria-label="Close">×</button></form>
+  <dialog id="searchDialog" class="app-dialog" aria-labelledby="searchDialogTitle">
+    <form method="dialog" class="dialog-close-form"><button class="dialog-close" value="close" aria-label="Close search">×</button></form>
     <p class="eyebrow">GLOBAL SEARCH</p>
-    <h2>Find anything</h2>
-    <input id="searchInput" class="search-input" placeholder="Goals, tasks, habits, lessons..." />
-    <div id="searchResults" class="search-results"></div>
+    <h2 id="searchDialogTitle">Find anything</h2>
+    <label class="field-label" for="searchInput">Search goals, tasks, habits, modules, phases, or lessons</label>
+    <input id="searchInput" class="search-input" placeholder="Try Finance or Visual geometry" autocomplete="off" />
+    <div id="searchResults" class="search-results" aria-live="polite"></div>
   </dialog>
 
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="shared-state.js"></script>
   <script src="mvp.js"></script>
 </body>
 </html>
