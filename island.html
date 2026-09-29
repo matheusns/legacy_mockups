@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#03131d" />
+  <title>LEGACY — Island Goals</title>
+  <link rel="stylesheet" href="geek.css" />
+</head>
+<body data-page="island">
+  <main class="app-frame">
+    <header class="hud-header">
+      <a class="brand-lockup" href="./"><span class="brand-crown">♛</span><strong>LEGACY</strong><small>A BETTER YOU LEAVES A BRIGHTER TOMORROW</small></a>
+      <div class="hud-actions"><a class="hud-icon" href="./goals-map" aria-label="Back to world map" style="display:grid;place-items:center;text-decoration:none">‹</a><button class="avatar-button" type="button"><span class="pixel-avatar">🧑🏻‍💻</span><small>Lv. <b>12</b></small></button></div>
+    </header>
+
+    <section class="island-hero pixel-panel">
+      <div class="island-hero-copy">
+        <p class="pixel-kicker" data-phase-theme>CITADEL</p>
+        <h1><span data-phase-title>Career</span> Island</h1>
+        <p data-phase-tagline>Build a meaningful career. Create freedom through your skills.</p>
+        <div class="island-quote" data-phase-quote>A SKILL TODAY BUILDS A BRIGHTER TOMORROW.</div>
+      </div>
+      <div class="island-banner"><div class="island-castle">♜</div></div>
+      <div class="island-tabs">
+        <button class="active" type="button" data-tab="goals">◎ Goals & Tasks</button>
+        <button type="button" data-tab="overview">▥ Overview</button>
+        <button type="button" data-tab="notes">▤ Notes</button>
+        <button type="button" data-tab="resources">▦ Resources</button>
+      </div>
+    </section>
+
+    <section class="status-grid" data-status-grid>
+      <article class="status-card overdue"><b data-overdue>2</b><small>Overdue</small></article>
+      <article class="status-card"><b data-in-progress>3</b><small>In Progress</small></article>
+      <article class="status-card done"><b data-done>5</b><small>Done</small></article>
+      <article class="status-card next"><b data-next>2</b><small>Next Actions</small></article>
+    </section>
+
+    <section data-view="goals">
+      <div data-goal-sections></div>
+      <div class="register-task-fixed"><button class="neon-cta" type="button" data-register-task>＋ Register New Task</button></div>
+    </section>
+
+    <section class="pixel-panel" data-view="overview" hidden style="padding:20px">
+      <p class="pixel-kicker">ISLAND OVERVIEW</p><h2 data-overview-title>Career progression</h2>
+      <div class="focus-stats" style="margin-top:14px">
+        <article class="focus-stat"><b data-overview-pct>0%</b><small>Island complete</small></article>
+        <article class="focus-stat"><b data-overview-goals>0</b><small>Goals</small></article>
+        <article class="focus-stat"><b data-overview-tasks>0</b><small>Tasks</small></article>
+      </div>
+      <p style="color:#91a9b8;line-height:1.6">Long-term goals define direction. Mid-term goals create projects and milestones. Short-term goals convert the plan into actions you can execute now. Every task belongs to this hierarchy, so status and registration happen inside the island context.</p>
+    </section>
+
+    <section class="pixel-panel" data-view="notes" hidden style="padding:20px">
+      <p class="pixel-kicker">ISLAND NOTES</p><h2>Strategic notes</h2>
+      <textarea data-notes style="width:100%;min-height:260px;margin-top:12px;padding:14px;border:1px solid #24566b;border-radius:12px;background:#071d29;color:white" placeholder="Write decisions, lessons learned and island strategy..."></textarea>
+      <button class="neon-cta" type="button" data-save-notes style="margin-top:12px">Save Notes</button>
+    </section>
+
+    <section class="pixel-panel" data-view="resources" hidden style="padding:20px">
+      <p class="pixel-kicker">RESOURCES</p><h2>Linked knowledge</h2>
+      <div class="milestone-list" style="margin-top:14px">
+        <div class="goal-section-header"><span>📚 Learning plans</span><strong>3</strong></div>
+        <div class="goal-section-header"><span>🔗 Reference links</span><strong>5</strong></div>
+        <div class="goal-section-header"><span>🧠 Lessons learned</span><strong>2</strong></div>
+      </div>
+    </section>
+
+    <nav class="game-nav" aria-label="Primary navigation">
+      <a href="./"><span>⌂</span>Home</a>
+      <a href="./goals-map"><span>🗺</span>World Map</a>
+      <a class="active" href="./island?phase=career"><span>◎</span>Goals</a>
+      <a href="./focus"><span>🌿</span>Focus</a>
+      <button type="button" data-register-task><span>☑</span>Tasks</button>
+      <button type="button" data-journal><span>▤</span>Journal</button>
+    </nav>
+  </main>
+
+  <dialog class="modal" id="taskDialog" aria-labelledby="taskDialogTitle">
+    <form method="dialog"><button class="modal-close" value="close" aria-label="Close">×</button></form>
+    <p class="pixel-kicker">REGISTER TASK</p><h2 id="taskDialogTitle">Add Task to Goal</h2>
+    <form class="quest-form" id="taskForm">
+      <label>Task title<input id="taskTitle" required maxlength="90" placeholder="Next actionable step" /></label>
+      <label>Goal horizon<select id="taskHorizon"><option value="long">Long-term</option><option value="mid">Mid-term</option><option value="short">Short-term</option></select></label>
+      <label>Goal<select id="taskGoal"></select></label>
+      <label>Estimated focus<select id="taskFocus"><option value="25">25 min</option><option value="50">50 min</option><option value="90">90 min</option></select></label>
+      <button class="neon-cta" type="submit">＋ Add Task to This Goal</button>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="genericDialog"><form method="dialog"><button class="modal-close" value="close">×</button></form><div data-generic-body></div></dialog>
+  <div class="toast" data-toast hidden></div>
+
+  <script src="geek-state.js"></script>
+  <script src="island.js"></script>
+</body>
+</html>
