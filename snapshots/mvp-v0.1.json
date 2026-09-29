@@ -1,0 +1,31 @@
+{
+  "artifact": "LEGACY-MOCKUP-MVP-STATE",
+  "version": "0.1",
+  "status": "candidate",
+  "scope": "mockups-only",
+  "reference_baseline": "LEGACY-REF-UX-001",
+  "top_level_navigation": ["Today", "Map", "Life", "Insights", "Me"],
+  "modules": ["Personal", "Work", "Health", "Finance", "Learning"],
+  "functional_prototypes": [
+    "tasks",
+    "habits",
+    "calendar context",
+    "missed-day recovery",
+    "undo",
+    "goal phase navigation",
+    "thematic goal map deep link",
+    "health logging",
+    "finance goal simulation",
+    "learning lesson progression",
+    "work focus completion",
+    "personal reflection",
+    "weekly insights",
+    "XP",
+    "coins",
+    "skills",
+    "rewards",
+    "private-first settings",
+    "AI feature proposal governance"
+  ],
+  "next_gate": "user_feedback_after_e2e"
+}
