@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f4f4f1" />
+  <meta name="theme-color" content="#f3f1e9" />
   <title>LEGACY Mockup — MVP</title>
   <link rel="stylesheet" href="mvp.css" />
 </head>
@@ -11,140 +11,211 @@
   <main class="app-shell">
     <header class="app-header">
       <div>
-        <p class="eyebrow">LEGACY · MVP 0.1</p>
+        <p class="eyebrow">LEGACY · MVP 0.2</p>
         <h1 id="screenTitle">Today</h1>
       </div>
-      <button id="profileButton" class="avatar-button" type="button" aria-label="Open Me">MS</button>
+      <div class="header-actions">
+        <button id="searchButton" class="icon-button" type="button" aria-label="Search everything">⌕</button>
+        <button id="quickAddButton" class="icon-button primary-icon" type="button" aria-label="Quick add">＋</button>
+      </div>
     </header>
 
-    <section id="screen-today" class="screen active" data-screen="today">
-      <article id="recoveryCard" class="recovery-card hidden">
-        <p class="eyebrow">RECOVERY</p>
-        <h2>Missed yesterday?</h2>
-        <p>Keep the history. Choose how you want to continue today.</p>
-        <div class="button-row">
-          <button class="secondary-button recovery-action" data-recovery="resume">Resume</button>
-          <button class="secondary-button recovery-action" data-recovery="reschedule">Reschedule</button>
-          <button class="secondary-button recovery-action" data-recovery="skip">Skip</button>
-        </div>
-      </article>
-
-      <article class="summary-card">
+    <section id="view-today" class="view active" data-view="today">
+      <article id="recoveryCard" class="notice-card" hidden>
         <div>
-          <p class="eyebrow">DAILY LOOP</p>
-          <h2>Good momentum</h2>
-          <p id="dailySummaryText" class="muted">Complete one meaningful action to move the day forward.</p>
+          <p class="eyebrow">RECOVERY MODE</p>
+          <h2>Resume without resetting progress.</h2>
+          <p>You have unfinished actions from a previous day. Choose what to carry forward.</p>
         </div>
-        <div class="score-ring" aria-label="Daily completion score"><strong id="dailyScore">0%</strong></div>
+        <button id="recoverButton" class="small-button" type="button">Review</button>
+      </article>
+
+      <article class="hero-card">
+        <div>
+          <p class="eyebrow">NEXT BEST ACTION</p>
+          <h2 id="nextActionTitle">Finish architecture notes</h2>
+          <p id="nextActionMeta">Career · 25 min · +20 XP</p>
+        </div>
+        <button id="completeNextButton" class="cta-button" type="button">Complete</button>
       </article>
 
       <article class="card">
         <div class="section-heading">
-          <div><p class="eyebrow">NEXT ACTIONS</p><h2>Tasks</h2></div>
-          <span id="taskSummary" class="pill">0 / 0</span>
+          <div>
+            <p class="eyebrow">DAILY EXECUTION</p>
+            <h2>Today</h2>
+          </div>
+          <span id="todaySummary" class="pill">0/0</span>
         </div>
-        <form id="todoForm" class="inline-form">
-          <input id="todoInput" type="text" maxlength="80" autocomplete="off" placeholder="Add a task..." aria-label="New task" required />
-          <button class="primary-square" type="submit" aria-label="Add task">+</button>
-        </form>
-        <ul id="todoList" class="clean-list"></ul>
+        <ul id="actionList" class="action-list"></ul>
+        <button id="addTaskInline" class="secondary-wide" type="button">＋ Add task</button>
       </article>
 
-      <article class="card">
-        <div class="section-heading">
-          <div><p class="eyebrow">HABITS</p><h2>Quick check-in</h2></div>
-          <button id="simulateMissedDay" class="text-button" type="button">Simulate miss</button>
-        </div>
-        <div id="habitGrid" class="habit-grid"></div>
+      <article class="card split-card">
+        <section>
+          <p class="eyebrow">HYDRATION</p>
+          <h2><span id="waterAmount">0</span> ml</h2>
+          <p class="subtle"><span id="waterGlasses">0</span>/8 glasses</p>
+          <div class="mini-progress"><span id="waterProgress"></span></div>
+          <div class="row-actions">
+            <button id="waterMinus" type="button" class="mini-button">−250</button>
+            <button id="waterPlus" type="button" class="mini-button strong">+250</button>
+          </div>
+        </section>
+        <section>
+          <p class="eyebrow">CONTINUITY</p>
+          <h2 id="continuityScore">82%</h2>
+          <p class="subtle">7-day habit strength</p>
+          <div class="continuity-grid" id="continuityGrid" aria-label="Seven day continuity"></div>
+        </section>
       </article>
 
-      <article class="card agenda-card">
-        <div class="section-heading"><div><p class="eyebrow">CALENDAR CONTEXT</p><h2>Today</h2></div></div>
-        <div class="agenda-item"><time>09:00</time><span>Deep work block</span></div>
-        <div class="agenda-item"><time>13:30</time><span>Learning session</span></div>
-        <div class="agenda-item"><time>18:30</time><span>Workout</span></div>
+      <article class="card compact-card">
+        <div>
+          <p class="eyebrow">CALENDAR CONTEXT</p>
+          <h3>18:30 · Evening run</h3>
+          <p class="subtle">Health · 45 min</p>
+        </div>
+        <button class="small-button ghost" type="button" data-open-module="health">Open</button>
       </article>
     </section>
 
-    <section id="screen-map" class="screen" data-screen="map">
-      <article class="map-hero">
-        <div><p class="eyebrow light">LONG-TERM PROGRESSION</p><h2>Your world</h2><p>Five phases. Real progress unlocks the route.</p></div>
-        <a class="map-open-button" href="./goals-map">Open world map</a>
+    <section id="view-map" class="view" data-view="map">
+      <article class="map-preview-card">
+        <div class="map-preview-header">
+          <div>
+            <p class="eyebrow">STRATEGIC PROGRESSION</p>
+            <h2>World 01</h2>
+          </div>
+          <a class="small-button" href="./goals-map">Explore full map</a>
+        </div>
+        <div id="phaseStrip" class="phase-strip"></div>
       </article>
-      <div id="phaseRail" class="phase-rail"></div>
       <article class="card">
         <p class="eyebrow">SELECTED PHASE</p>
         <h2 id="selectedPhaseTitle">Career</h2>
-        <p id="selectedPhaseDescription" class="muted"></p>
-        <div class="progress-track"><span id="phaseProgressFill"></span></div>
-        <p id="phaseProgressText" class="small-copy"></p>
+        <p id="selectedPhaseDescription" class="subtle"></p>
+        <div id="phaseMilestoneList" class="milestone-list"></div>
       </article>
     </section>
 
-    <section id="screen-life" class="screen" data-screen="life">
-      <p class="section-intro">Choose a domain. The interaction grammar stays the same across modules.</p>
-      <div id="moduleGrid" class="module-grid"></div>
-      <article id="modulePanel" class="card module-panel"></article>
+    <section id="view-life" class="view" data-view="life">
+      <article class="card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">LIFE HUB</p>
+            <h2>Modules</h2>
+          </div>
+          <span class="pill">6</span>
+        </div>
+        <div id="moduleGrid" class="module-grid"></div>
+      </article>
+      <article id="moduleDetail" class="card module-detail">
+        <p class="eyebrow" id="moduleEyebrow">HEALTH</p>
+        <h2 id="moduleTitle">Health</h2>
+        <p id="moduleDescription" class="subtle"></p>
+        <div id="moduleContent"></div>
+      </article>
     </section>
 
-    <section id="screen-insights" class="screen" data-screen="insights">
-      <article class="metric-grid">
-        <div class="metric-card"><span>Continuity</span><strong id="continuityMetric">82%</strong><small>soft streak</small></div>
-        <div class="metric-card"><span>XP this week</span><strong id="weeklyXpMetric">0</strong><small>meaningful actions</small></div>
-        <div class="metric-card"><span>Admin time</span><strong>4m</strong><small>target &lt; 10m/day</small></div>
-        <div class="metric-card"><span>Domains active</span><strong>5</strong><small>shared model</small></div>
+    <section id="view-insights" class="view" data-view="insights">
+      <article class="hero-card insight-hero">
+        <div>
+          <p class="eyebrow">THIS WEEK</p>
+          <h2><span id="weeklyCompletion">76</span>% completion</h2>
+          <p class="subtle">Meaningful actions completed across all domains.</p>
+        </div>
+        <div class="ring" id="completionRing" aria-label="Weekly completion ring"><span id="ringLabel">76%</span></div>
       </article>
       <article class="card">
-        <div class="section-heading"><div><p class="eyebrow">7-DAY RHYTHM</p><h2>Consistency</h2></div></div>
-        <div id="weekChart" class="week-chart" aria-label="Seven day completion chart"></div>
+        <p class="eyebrow">DOMAIN PROGRESS</p>
+        <div id="domainBars" class="domain-bars"></div>
       </article>
       <article class="card">
-        <p class="eyebrow">WEEKLY REVIEW</p><h2>One useful signal</h2>
-        <p id="insightText" class="muted">Your best days combine one important task with one health action.</p>
-        <button id="refreshInsight" class="secondary-button wide" type="button">Show another insight</button>
+        <p class="eyebrow">REVIEW SIGNALS</p>
+        <div class="signal-list">
+          <button class="signal-card" type="button" data-signal="recovery">
+            <strong>Recovery opportunity</strong><span>2 habits missed once this week</span>
+          </button>
+          <button class="signal-card" type="button" data-signal="focus">
+            <strong>Focus trend</strong><span>Career completion is up 14%</span>
+          </button>
+          <button class="signal-card" type="button" data-signal="finance">
+            <strong>Finance checkpoint</strong><span>Emergency buffer at 63%</span>
+          </button>
+        </div>
       </article>
     </section>
 
-    <section id="screen-me" class="screen" data-screen="me">
+    <section id="view-me" class="view" data-view="me">
       <article class="profile-card">
-        <div class="profile-avatar">MS</div>
-        <div><p class="eyebrow light">LEVEL <span id="levelValue">4</span></p><h2>Matheus</h2><p><span id="xpValue">0</span> XP · <span id="coinValue">0</span> coins</p></div>
+        <div class="avatar">M</div>
+        <div class="profile-copy">
+          <p class="eyebrow">LEVEL <span id="levelValue">7</span></p>
+          <h2>Explorer</h2>
+          <p class="subtle"><span id="xpValue">640</span> / 800 XP</p>
+          <div class="mini-progress"><span id="xpProgress"></span></div>
+        </div>
       </article>
-      <article class="card"><p class="eyebrow">SKILLS</p><div id="skillList" class="skill-list"></div></article>
+
       <article class="card">
-        <div class="section-heading"><div><p class="eyebrow">REWARDS</p><h2>Meaningful unlocks</h2></div></div>
-        <button id="rewardButton" class="reward-button" type="button">☕ Focus reward · 20 coins</button>
-        <p id="rewardMessage" class="small-copy"></p>
+        <div class="section-heading">
+          <div><p class="eyebrow">SKILLS</p><h2>Identity growth</h2></div>
+          <span class="pill">XP-linked</span>
+        </div>
+        <div id="skillGrid" class="skill-grid"></div>
       </article>
+
       <article class="card">
-        <p class="eyebrow">AI FEATURE REQUEST</p><h2>Propose, don't auto-ship</h2>
-        <p class="muted">Capture an idea and turn it into a candidate proposal. Human approval stays mandatory.</p>
-        <form id="featureForm" class="stack-form">
-          <textarea id="featureInput" rows="3" placeholder="Example: add a weekly family challenge..." aria-label="Feature request"></textarea>
-          <button class="primary-button" type="submit">Generate proposal</button>
-        </form>
-        <div id="featureProposal" class="proposal-box hidden"></div>
+        <div class="section-heading">
+          <div><p class="eyebrow">REWARDS</p><h2>Optional economy</h2></div>
+          <span class="pill">🪙 <span id="coinValue">120</span></span>
+        </div>
+        <div id="rewardList" class="reward-list"></div>
       </article>
-      <article class="card">
-        <p class="eyebrow">WORKSPACE</p><h2>Private by default</h2>
-        <div class="setting-row"><span>Family sharing</span><strong>Off</strong></div>
-        <div class="setting-row"><span>Competition</span><strong>Off</strong></div>
-        <div class="setting-row"><span>Theme</span><strong>Restrained + Map</strong></div>
+
+      <article class="card settings-list">
+        <button id="lowGameToggle" class="settings-row" type="button"><span>Low-gamification mode</span><strong id="lowGameStatus">Off</strong></button>
+        <button id="workspaceButton" class="settings-row" type="button"><span>Workspace & family</span><strong>Private ›</strong></button>
+        <button id="featureRequestButton" class="settings-row" type="button"><span>Suggest a feature</span><strong>AI draft ›</strong></button>
       </article>
     </section>
 
-    <nav class="bottom-nav" aria-label="Primary navigation">
-      <button class="nav-button active" data-nav="today" aria-label="Today"><span>●</span><small>Today</small></button>
-      <button class="nav-button" data-nav="map" aria-label="Map"><span>◇</span><small>Map</small></button>
-      <button class="nav-button" data-nav="life" aria-label="Life"><span>▦</span><small>Life</small></button>
-      <button class="nav-button" data-nav="insights" aria-label="Insights"><span>↗</span><small>Insights</small></button>
-      <button class="nav-button" data-nav="me" aria-label="Me"><span>○</span><small>Me</small></button>
+    <nav class="tab-bar" aria-label="Primary navigation">
+      <button class="tab active" type="button" data-target="today"><span>●</span>Today</button>
+      <button class="tab" type="button" data-target="map"><span>◆</span>Map</button>
+      <button class="tab" type="button" data-target="life"><span>▦</span>Life</button>
+      <button class="tab" type="button" data-target="insights"><span>▥</span>Insights</button>
+      <button class="tab" type="button" data-target="me"><span>◎</span>Me</button>
     </nav>
   </main>
 
-  <div id="toast" class="toast hidden" role="status" aria-live="polite">
-    <span id="toastText"></span><button id="undoButton" type="button">Undo</button>
-  </div>
+  <dialog id="appDialog" class="app-dialog">
+    <form method="dialog"><button class="dialog-close" value="close" aria-label="Close">×</button></form>
+    <div id="dialogBody"></div>
+  </dialog>
+
+  <dialog id="quickAddDialog" class="app-dialog">
+    <form method="dialog"><button class="dialog-close" value="close" aria-label="Close">×</button></form>
+    <p class="eyebrow">QUICK ADD</p>
+    <h2>Create action</h2>
+    <form id="quickAddForm" class="form-stack">
+      <label>Title<input id="quickAddTitle" required maxlength="80" placeholder="What needs to happen?" /></label>
+      <label>Type<select id="quickAddType"><option value="task">Task</option><option value="habit">Habit</option></select></label>
+      <label>Domain<select id="quickAddDomain"><option>Personal</option><option>Work</option><option>Health</option><option>Finance</option><option>Learning</option></select></label>
+      <button class="cta-button full" type="submit">Add to Today</button>
+    </form>
+  </dialog>
+
+  <dialog id="searchDialog" class="app-dialog">
+    <form method="dialog"><button class="dialog-close" value="close" aria-label="Close">×</button></form>
+    <p class="eyebrow">GLOBAL SEARCH</p>
+    <h2>Find anything</h2>
+    <input id="searchInput" class="search-input" placeholder="Goals, tasks, habits, lessons..." />
+    <div id="searchResults" class="search-results"></div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <script src="mvp.js"></script>
 </body>
 </html>
