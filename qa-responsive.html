@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LEGACY Responsive QA Harness</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:20px;background:#eee;color:#222}
+h1{font-size:22px}.grid{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.case{background:#fff;padding:12px;border:1px solid #bbb;border-radius:10px}
+iframe{display:block;border:2px solid #222;background:#fff}
+pre{max-width:390px;white-space:pre-wrap;font-size:12px}
+</style>
+</head>
+<body>
+<h1>LEGACY responsive QA harness</h1>
+<p>Test-only route. Frames render the production root at fixed CSS viewport widths.</p>
+<div class="grid">
+  <section class="case"><h2>390 × 844</h2><iframe id="frame390" src="./index.html?qa=390" width="390" height="844"></iframe><pre id="result390">Loading…</pre></section>
+  <section class="case"><h2>320 × 844</h2><iframe id="frame320" src="./index.html?qa=320" width="320" height="844"></iframe><pre id="result320">Loading…</pre></section>
+</div>
+<script>
+function inspect(frame,result){
+  const win=frame.contentWindow,doc=frame.contentDocument;
+  const critical=[...doc.querySelectorAll("#searchButton,#quickAddButton,.tab,.check-button")].filter(el=>el.offsetParent!==null);
+  const sizes=critical.map(el=>{const r=el.getBoundingClientRect();return {id:el.id||el.textContent.trim(),w:Math.round(r.width),h:Math.round(r.height)}});
+  const payload={
+    innerWidth:win.innerWidth,
+    innerHeight:win.innerHeight,
+    documentScrollWidth:doc.documentElement.scrollWidth,
+    bodyScrollWidth:doc.body.scrollWidth,
+    horizontalOverflow:doc.documentElement.scrollWidth>win.innerWidth||doc.body.scrollWidth>win.innerWidth,
+    inactiveViewsVisible:[...doc.querySelectorAll(".view:not(.active)")].filter(v=>getComputedStyle(v).display!=="none").length,
+    criticalTargetsAtLeast44:sizes.every(s=>s.w>=44&&s.h>=44),
+    sizes
+  };
+  result.textContent=JSON.stringify(payload,null,2);
+  result.dataset.ready="true";
+  result.dataset.pass=String(!payload.horizontalOverflow&&payload.inactiveViewsVisible===0&&payload.criticalTargetsAtLeast44);
+}
+document.querySelectorAll("iframe").forEach(frame=>frame.addEventListener("load",()=>setTimeout(()=>inspect(frame,document.querySelector(frame.id==="frame390"?"#result390":"#result320")),250)));
+</script>
+</body>
+</html>
