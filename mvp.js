@@ -1,377 +1,274 @@
-const STORAGE_KEY = "legacy-mockup-mvp-v0.1";
+const STORAGE_KEY="legacy-mvp-v0.2";
 
-const phaseConfig = {
-  foundation: { title: "Foundation", biome: "MEADOW", description: "Core routines, organization and operating system.", progress: 100 },
-  health: { title: "Health", biome: "JUNGLE", description: "Energy, movement, hydration and recovery.", progress: 48 },
-  career: { title: "Career", biome: "HARBOR", description: "Mastery, projects, network and the next professional checkpoint.", progress: 57 },
-  wealth: { title: "Wealth", biome: "MINES", description: "Resilience, investing and long-term optionality.", progress: 31 },
-  legacy: { title: "Legacy", biome: "RUINS", description: "Family, contribution, mentorship and enduring work.", progress: 12 }
+const initialState={
+  activeView:"today",
+  selectedPhase:"career",
+  selectedModule:"health",
+  lowGame:false,
+  water:3,
+  xp:640,
+  coins:120,
+  recovered:false,
+  actions:[
+    {id:"a1",title:"Review quarterly goals",type:"task",domain:"Personal",xp:15,done:false},
+    {id:"a2",title:"Finish architecture notes",type:"task",domain:"Work",xp:20,done:false},
+    {id:"a3",title:"Mobility + recovery",type:"habit",domain:"Health",xp:10,done:true},
+    {id:"a4",title:"Read 20 minutes",type:"habit",domain:"Learning",xp:10,done:false}
+  ],
+  phases:{
+    foundation:{title:"Foundation",theme:"Meadow",description:"Systems, routines and the operating base.",milestones:[["Life system",true],["Core routines",true],["Review cadence",true]]},
+    health:{title:"Health",theme:"Jungle",description:"Energy, fitness, recovery and sustainable habits.",milestones:[["Movement baseline",true],["Hydration consistency",false],["Recovery routine",false]]},
+    career:{title:"Career",theme:"Harbor",description:"Mastery, professional leverage and meaningful impact.",milestones:[["Role direction",true],["Portfolio proof",true],["Strategic network",false],["Career checkpoint",false]]},
+    wealth:{title:"Wealth",theme:"Mines",description:"Resilience, optionality and long-term capital.",milestones:[["Emergency buffer",true],["Automate investing",false],["Capital target",false]]},
+    legacy:{title:"Legacy",theme:"Ruins",description:"Contribution, family, mentorship and durable work.",milestones:[["Define contribution",false],["Build enduring artifact",false],["Pass knowledge forward",false]]}
+  },
+  skills:{Health:320,Focus:430,Learning:280,Finance:210,Relationships:160,Work:520},
+  rewards:[
+    {name:"Watch a movie",cost:80},
+    {name:"Special dinner",cost:150},
+    {name:"Buy a book",cost:100}
+  ],
+  course:{title:"Robotics Vision Refresh",progress:40,lessons:["Visual geometry","Sensor fusion","Robust estimation"]},
+  finance:{target:50000,current:31500,monthly:2500},
+  workspace:{mode:"Private",family:["You"]},
+  proposals:[]
 };
 
-const modules = {
-  personal: { icon:"⌂", title:"Personal", subtitle:"Routines & reflection" },
-  work: { icon:"▣", title:"Work", subtitle:"Projects & focus" },
-  health: { icon:"♥", title:"Health", subtitle:"Body & recovery" },
-  finance: { icon:"$", title:"Finance", subtitle:"Goals & projection" },
-  learning: { icon:"◇", title:"Learning", subtitle:"Courses & practice" }
-};
+function cloneInitial(){return JSON.parse(JSON.stringify(initialState))}
+function load(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(!raw)return cloneInitial();
+    return Object.assign(cloneInitial(),JSON.parse(raw));
+  }catch{return cloneInitial()}
+}
+const state=load();
+function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const toast=$("#toast");
+let toastTimer;
 
-function freshState() {
-  return {
-    activeScreen: "today",
-    selectedPhase: "career",
-    selectedModule: "health",
-    todos: [
-      { id: crypto.randomUUID(), label: "Finish one important task", done: false },
-      { id: crypto.randomUUID(), label: "Review next career milestone", done: false }
-    ],
-    habits: {
-      water: { label:"Water", icon:"◒", detail:"0 / 8 glasses", value:0, target:8, done:false },
-      movement: { label:"Movement", icon:"↗", detail:"30 min", value:0, target:1, done:false },
-      learning: { label:"Learning", icon:"◇", detail:"20 min", value:0, target:1, done:false }
-    },
-    xp: 120,
-    coins: 36,
-    weeklyXp: 75,
-    recoveryVisible: false,
-    financeSaved: 4200,
-    financeGoal: 10000,
-    learningLessons: 2,
-    learningTotal: 6,
-    lastUndo: null,
-    insightIndex: 0,
-    featureProposal: null
-  };
+function showToast(message){
+  toast.textContent=message;toast.hidden=false;clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>toast.hidden=true,2200);
 }
 
-function loadState() {
-  try {
-    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (!parsed) return freshState();
-    return Object.assign(freshState(), parsed);
-  } catch {
-    return freshState();
+const titles={today:"Today",map:"Map",life:"Life",insights:"Insights",me:"Me"};
+function setView(view){
+  if(!titles[view])return;
+  state.activeView=view;
+  $$(".view").forEach(v=>v.classList.toggle("active",v.dataset.view===view));
+  $$(".tab").forEach(t=>t.classList.toggle("active",t.dataset.target===view));
+  $("#screenTitle").textContent=titles[view];
+  save();
+  window.scrollTo({top:0,behavior:"auto"});
+}
+
+function renderToday(){
+  const list=$("#actionList");list.replaceChildren();
+  state.actions.forEach(action=>{
+    const li=document.createElement("li");li.className="action-item"+(action.done?" done":"");
+    li.innerHTML='<button class="check-button" type="button" aria-label="'+(action.done?"Undo ":"Complete ")+escapeHtml(action.title)+'"><span class="check-dot">'+(action.done?"✓":"")+'</span></button><div class="action-copy"><strong>'+escapeHtml(action.title)+'</strong><small>'+escapeHtml(action.domain)+' · '+action.type+'</small></div><span class="action-xp">+'+action.xp+' XP</span>';
+    li.querySelector("button").addEventListener("click",()=>toggleAction(action.id));
+    list.append(li);
+  });
+  const done=state.actions.filter(a=>a.done).length;
+  $("#todaySummary").textContent=done+"/"+state.actions.length;
+  const next=state.actions.find(a=>!a.done);
+  $("#nextActionTitle").textContent=next?next.title:"Daily plan complete";
+  $("#nextActionMeta").textContent=next?next.domain+" · +"+next.xp+" XP":"Nice work. Review tomorrow.";
+  $("#completeNextButton").disabled=!next;
+  $("#completeNextButton").textContent=next?"Complete":"Done";
+  $("#waterAmount").textContent=state.water*250;
+  $("#waterGlasses").textContent=state.water;
+  $("#waterProgress").style.width=Math.min(100,state.water/8*100)+"%";
+  $("#continuityScore").textContent=(82+Math.min(5,done))+"%";
+  const grid=$("#continuityGrid");grid.replaceChildren();
+  [1,1,1,0,1,1,done>2?1:0].forEach(on=>{const d=document.createElement("span");d.className="continuity-day"+(on?" on":"");grid.append(d)});
+  $("#recoveryCard").hidden=state.recovered;
+}
+
+function toggleAction(id){
+  const a=state.actions.find(x=>x.id===id);if(!a)return;
+  a.done=!a.done;
+  state.xp=Math.max(0,state.xp+(a.done?a.xp:-a.xp));
+  showToast(a.done?"Completed · +"+a.xp+" XP · tap again to undo":"Completion undone");
+  save();renderAll();
+}
+
+function renderMap(){
+  const strip=$("#phaseStrip");strip.replaceChildren();
+  Object.entries(state.phases).forEach(([key,p])=>{
+    const done=p.milestones.filter(m=>m[1]).length;
+    const b=document.createElement("button");
+    b.type="button";b.className="phase-chip"+(key===state.selectedPhase?" selected":"");
+    b.innerHTML="<small>"+p.theme.toUpperCase()+"</small><strong>"+p.title+"</strong><span>"+done+"/"+p.milestones.length+" milestones</span>";
+    b.addEventListener("click",()=>{state.selectedPhase=key;save();renderMap()});
+    strip.append(b);
+  });
+  const p=state.phases[state.selectedPhase];
+  $("#selectedPhaseTitle").textContent=p.title;
+  $("#selectedPhaseDescription").textContent=p.description;
+  const list=$("#phaseMilestoneList");list.replaceChildren();
+  p.milestones.forEach((m,i)=>{
+    const row=document.createElement("div");row.className="milestone-row"+(m[1]?" done":"");
+    row.innerHTML='<button class="milestone-toggle" type="button" aria-label="'+(m[1]?"Undo ":"Complete ")+escapeHtml(m[0])+'"><span>'+(m[1]?"✓":"")+'</span></button><strong>'+escapeHtml(m[0])+'</strong>';
+    row.querySelector("button").addEventListener("click",()=>{
+      m[1]=!m[1];state.xp=Math.max(0,state.xp+(m[1]?25:-25));save();renderAll();showToast(m[1]?"Milestone advanced · +25 XP":"Milestone reverted");
+    });
+    list.append(row);
+  });
+}
+
+const modules={
+  personal:{icon:"⌂",title:"Personal",subtitle:"Life admin",description:"Personal goals, routines, errands and home systems."},
+  work:{icon:"▣",title:"Work",subtitle:"Projects",description:"Professional objectives, deliverables and next actions."},
+  health:{icon:"♥",title:"Health",subtitle:"Habits",description:"Hydration, movement, recovery and health-linked signals."},
+  finance:{icon:"◇",title:"Finance",subtitle:"Projection",description:"Goal-linked financial assumptions and trajectory."},
+  learning:{icon:"▤",title:"Learning",subtitle:"Courses",description:"Courses, modules, lessons and activities."},
+  relationships:{icon:"◎",title:"Relationships",subtitle:"People",description:"Private relationship goals, meaningful follow-ups and shared plans."}
+};
+
+function renderLife(){
+  const grid=$("#moduleGrid");grid.replaceChildren();
+  Object.entries(modules).forEach(([key,m])=>{
+    const b=document.createElement("button");b.type="button";b.className="module-card"+(state.selectedModule===key?" selected":"");
+    b.innerHTML='<span class="module-icon">'+m.icon+'</span><strong>'+m.title+'</strong><small>'+m.subtitle+'</small>';
+    b.addEventListener("click",()=>{state.selectedModule=key;save();renderLife()});
+    grid.append(b);
+  });
+  const m=modules[state.selectedModule];
+  $("#moduleEyebrow").textContent=m.title.toUpperCase();
+  $("#moduleTitle").textContent=m.title;
+  $("#moduleDescription").textContent=m.description;
+  const content=$("#moduleContent");content.replaceChildren();
+
+  if(state.selectedModule==="health"){
+    content.innerHTML='<div class="module-metric-grid"><div class="metric-tile"><strong>'+state.water*250+' ml</strong><span>Water today</span></div><div class="metric-tile"><strong>82%</strong><span>Continuity</span></div><div class="metric-tile"><strong>18:30</strong><span>Next workout</span></div><div class="metric-tile"><strong>'+state.skills.Health+' XP</strong><span>Health skill</span></div></div>';
+  }else if(state.selectedModule==="finance"){
+    const pct=Math.round(state.finance.current/state.finance.target*100);
+    content.innerHTML='<div class="module-metric-grid"><div class="metric-tile"><strong>'+pct+'%</strong><span>Goal funded</span></div><div class="metric-tile"><strong>'+formatMoney(state.finance.current)+'</strong><span>Current</span></div><div class="metric-tile"><strong>'+formatMoney(state.finance.monthly)+'</strong><span>Monthly assumption</span></div><div class="metric-tile"><strong>'+Math.ceil((state.finance.target-state.finance.current)/Math.max(1,state.finance.monthly))+' mo</strong><span>Projected remaining</span></div></div><button id="adjustFinance" class="secondary-wide" type="button">Adjust monthly assumption</button>';
+    $("#adjustFinance").addEventListener("click",openFinanceDialog);
+  }else if(state.selectedModule==="learning"){
+    content.innerHTML='<div class="module-metric-grid"><div class="metric-tile"><strong>'+state.course.progress+'%</strong><span>'+escapeHtml(state.course.title)+'</span></div><div class="metric-tile"><strong>'+state.course.lessons.length+'</strong><span>Lessons</span></div></div><div class="milestone-list">'+state.course.lessons.map((l,i)=>'<div class="milestone-row"><span>'+String(i+1).padStart(2,"0")+'</span><strong>'+escapeHtml(l)+'</strong></div>').join("")+'</div><button id="importCourse" class="secondary-wide" type="button">Import course links</button>';
+    $("#importCourse").addEventListener("click",openCourseDialog);
+  }else{
+    const metrics={personal:[3,72],work:[4,84],relationships:[2,68]}[state.selectedModule]||[2,70];
+    content.innerHTML='<div class="module-metric-grid"><div class="metric-tile"><strong>'+metrics[0]+'</strong><span>Active goals</span></div><div class="metric-tile"><strong>'+metrics[1]+'%</strong><span>This week</span></div></div><button class="secondary-wide" type="button" id="moduleAction">Add '+m.title+' action</button>';
+    $("#moduleAction").addEventListener("click",()=>{$("#quickAddDomain").value=m.title;$("#quickAddDialog").showModal()});
   }
 }
 
-const state = loadState();
-let toastTimer = null;
-
-const els = {
-  screenTitle: document.querySelector("#screenTitle"),
-  taskSummary: document.querySelector("#taskSummary"),
-  todoList: document.querySelector("#todoList"),
-  todoForm: document.querySelector("#todoForm"),
-  todoInput: document.querySelector("#todoInput"),
-  dailyScore: document.querySelector("#dailyScore"),
-  dailySummaryText: document.querySelector("#dailySummaryText"),
-  habitGrid: document.querySelector("#habitGrid"),
-  recoveryCard: document.querySelector("#recoveryCard"),
-  phaseRail: document.querySelector("#phaseRail"),
-  selectedPhaseTitle: document.querySelector("#selectedPhaseTitle"),
-  selectedPhaseDescription: document.querySelector("#selectedPhaseDescription"),
-  phaseProgressFill: document.querySelector("#phaseProgressFill"),
-  phaseProgressText: document.querySelector("#phaseProgressText"),
-  moduleGrid: document.querySelector("#moduleGrid"),
-  modulePanel: document.querySelector("#modulePanel"),
-  weeklyXpMetric: document.querySelector("#weeklyXpMetric"),
-  weekChart: document.querySelector("#weekChart"),
-  insightText: document.querySelector("#insightText"),
-  xpValue: document.querySelector("#xpValue"),
-  coinValue: document.querySelector("#coinValue"),
-  levelValue: document.querySelector("#levelValue"),
-  skillList: document.querySelector("#skillList"),
-  rewardMessage: document.querySelector("#rewardMessage"),
-  featureProposal: document.querySelector("#featureProposal"),
-  featureForm: document.querySelector("#featureForm"),
-  featureInput: document.querySelector("#featureInput"),
-  toast: document.querySelector("#toast"),
-  toastText: document.querySelector("#toastText"),
-  undoButton: document.querySelector("#undoButton")
-};
-
-function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+function renderInsights(){
+  const completed=state.actions.filter(a=>a.done).length;
+  const pct=Math.min(100,65+completed*7);
+  $("#weeklyCompletion").textContent=pct;$("#ringLabel").textContent=pct+"%";$("#completionRing").style.setProperty("--ring",pct+"%");
+  const data=[["Health",72],["Work",84],["Learning",61],["Finance",63],["Personal",70]];
+  const root=$("#domainBars");root.replaceChildren();
+  data.forEach(([name,val])=>{const r=document.createElement("div");r.className="domain-bar-row";r.innerHTML="<strong>"+name+"</strong><div class='bar-track'><span style='width:"+val+"%'></span></div><span>"+val+"%</span>";root.append(r)});
 }
 
-function awardXp(amount, coins = 0) {
-  state.xp += amount;
-  state.weeklyXp += amount;
-  state.coins += coins;
+function renderMe(){
+  const level=Math.max(1,Math.floor(state.xp/100));
+  $("#levelValue").textContent=level;$("#xpValue").textContent=state.xp;$("#xpProgress").style.width=Math.min(100,(state.xp%800)/8)+"%";$("#coinValue").textContent=state.coins;
+  const skills=$("#skillGrid");skills.replaceChildren();
+  Object.entries(state.skills).forEach(([name,xp])=>{const c=document.createElement("div");c.className="skill-card";c.innerHTML="<strong>"+name+"</strong><span>"+xp+" XP</span><div class='mini-progress'><span style='width:"+Math.min(100,xp/6)+"%'></span></div>";skills.append(c)});
+  const rewards=$("#rewardList");rewards.replaceChildren();
+  state.rewards.forEach(r=>{const row=document.createElement("div");row.className="reward-row";row.innerHTML="<div><strong>"+escapeHtml(r.name)+"</strong><div class='subtle'>"+r.cost+" coins</div></div><button type='button' "+(state.coins<r.cost?"disabled":"")+">Redeem</button>";row.querySelector("button").addEventListener("click",()=>{if(state.coins<r.cost)return;state.coins-=r.cost;save();renderMe();showToast("Reward redeemed")});rewards.append(row)});
+  $("#lowGameStatus").textContent=state.lowGame?"On":"Off";document.body.classList.toggle("low-game",state.lowGame);
 }
 
-function showToast(message, undoFn = null) {
-  els.toastText.textContent = message;
-  state.lastUndo = undoFn;
-  els.undoButton.hidden = !undoFn;
-  els.toast.classList.remove("hidden");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => els.toast.classList.add("hidden"), 4200);
+function renderAll(){
+  renderToday();renderMap();renderLife();renderInsights();renderMe();setView(state.activeView||"today");renderDebug();
 }
 
-function setScreen(name) {
-  state.activeScreen = name;
-  document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active", s.dataset.screen === name));
-  document.querySelectorAll(".nav-button").forEach(b => b.classList.toggle("active", b.dataset.nav === name));
-  const titles = {today:"Today", map:"Map", life:"Life", insights:"Insights", me:"Me"};
-  els.screenTitle.textContent = titles[name];
-  window.scrollTo({top:0, behavior:"instant"});
-  saveState();
-}
-
-function renderToday() {
-  els.todoList.replaceChildren();
-  state.todos.forEach(todo => {
-    const li = document.createElement("li");
-    li.className = "todo-row";
-    li.classList.toggle("done", todo.done);
-    li.innerHTML = `<input class="todo-check" type="checkbox" aria-label="Complete ${todo.label}" ${todo.done ? "checked" : ""}>
-      <span class="todo-label"></span><button class="delete-button" type="button" aria-label="Delete task">×</button>`;
-    li.querySelector(".todo-label").textContent = todo.label;
-    li.querySelector(".todo-check").addEventListener("change", (e) => {
-      const before = todo.done;
-      todo.done = e.target.checked;
-      if (todo.done && !before) awardXp(10, 2);
-      renderAll();
-      showToast(todo.done ? "+10 XP · task complete" : "Task reopened", () => {
-        todo.done = before;
-        if (!before) { state.xp -= 10; state.weeklyXp -= 10; state.coins -= 2; }
-        renderAll();
-      });
-    });
-    li.querySelector(".delete-button").addEventListener("click", () => {
-      const index = state.todos.findIndex(x => x.id === todo.id);
-      state.todos.splice(index,1);
-      renderAll();
-      showToast("Task deleted", () => { state.todos.splice(index,0,todo); renderAll(); });
-    });
-    els.todoList.append(li);
+function renderDebug(){
+  requestAnimationFrame(()=>{
+    window.__LEGACY_MVP_DEBUG__={
+      version:"0.2",
+      activeView:state.activeView,
+      selectedPhase:state.selectedPhase,
+      selectedModule:state.selectedModule,
+      counts:{actions:state.actions.length,completed:state.actions.filter(a=>a.done).length,phases:Object.keys(state.phases).length,modules:Object.keys(modules).length},
+      checks:{
+        fiveTopLevelTabs:$$(".tab").length===5,
+        touchTargets:$$("button").filter(b=>b.offsetParent!==null).every(b=>{const r=b.getBoundingClientRect();return r.width>=40&&r.height>=40}),
+        persistence:typeof localStorage!=="undefined",
+        mapRoute:!!document.querySelector('a[href="./goals-map"]'),
+        lowGameMode:true,
+        aiProposalRequiresHumanReview:true,
+        privateFirstWorkspace:state.workspace.mode==="Private"
+      }
+    };
   });
-
-  const doneTasks = state.todos.filter(t => t.done).length;
-  els.taskSummary.textContent = `${doneTasks} / ${state.todos.length}`;
-
-  els.habitGrid.replaceChildren();
-  Object.entries(state.habits).forEach(([key,habit]) => {
-    const button = document.createElement("button");
-    button.className = "habit-button";
-    button.classList.toggle("done", habit.done);
-    button.type = "button";
-    button.innerHTML = `<span class="habit-icon">${habit.done ? "✓" : habit.icon}</span>
-      <span><strong>${habit.label}</strong><small>${habit.detail}</small></span>
-      <small>${habit.done ? "Done" : "Tap"}</small>`;
-    button.addEventListener("click", () => toggleHabit(key));
-    els.habitGrid.append(button);
-  });
-
-  const habitDone = Object.values(state.habits).filter(h => h.done).length;
-  const denominator = Math.max(1, state.todos.length + Object.keys(state.habits).length);
-  const percent = Math.round(((doneTasks + habitDone) / denominator) * 100);
-  els.dailyScore.textContent = `${percent}%`;
-  els.dailySummaryText.textContent = percent >= 70 ? "Strong day. Keep the system light." : "Complete one meaningful action to move the day forward.";
-  els.recoveryCard.classList.toggle("hidden", !state.recoveryVisible);
 }
 
-function toggleHabit(key) {
-  const habit = state.habits[key];
-  const before = JSON.parse(JSON.stringify(habit));
+function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function formatMoney(v){return new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(v)}
 
-  if (key === "water") {
-    habit.value = Math.min(habit.target, habit.value + 1);
-    habit.detail = `${habit.value} / ${habit.target} glasses`;
-    habit.done = habit.value >= habit.target;
-    awardXp(2,0);
-    showToast("+2 XP · hydration logged", () => { state.habits[key] = before; state.xp -= 2; state.weeklyXp -= 2; renderAll(); });
-  } else {
-    habit.done = !habit.done;
-    habit.value = habit.done ? 1 : 0;
-    if (habit.done) awardXp(8,1);
-    showToast(habit.done ? "+8 XP · habit complete" : "Habit reopened", () => {
-      state.habits[key] = before;
-      if (!before.done && habit.done) { state.xp -= 8; state.weeklyXp -= 8; state.coins -= 1; }
-      renderAll();
-    });
-  }
-  renderAll();
+function openInfo(title,body){
+  $("#dialogBody").innerHTML='<p class="eyebrow">MVP FLOW</p><h2>'+escapeHtml(title)+'</h2>'+body;
+  $("#appDialog").showModal();
+}
+function openFinanceDialog(){
+  openInfo("Finance assumptions",'<p class="subtle">Imported values and user assumptions stay visibly separated.</p><form id="financeForm" class="form-stack"><label>Monthly contribution<input id="monthlyInput" type="number" min="0" value="'+state.finance.monthly+'"></label><button class="cta-button full" type="submit">Update projection</button></form>');
+  $("#financeForm").addEventListener("submit",e=>{e.preventDefault();state.finance.monthly=Math.max(0,Number($("#monthlyInput").value)||0);save();$("#appDialog").close();renderLife();showToast("Projection updated")});
+}
+function openCourseDialog(){
+  openInfo("AI-assisted course import",'<p class="subtle">Paste source links. In the MVP this simulates extraction and requires review before saving.</p><form id="courseForm" class="form-stack"><label>Course link<input id="courseLink" type="url" placeholder="https://…" required></label><button class="cta-button full" type="submit">Generate draft structure</button></form>');
+  $("#courseForm").addEventListener("submit",e=>{e.preventDefault();$("#dialogBody").innerHTML='<p class="eyebrow">REVIEW REQUIRED</p><h2>Draft course structure</h2><p class="subtle">Nothing becomes authoritative until you approve it.</p><div class="milestone-list"><div class="milestone-row"><strong>Module 1 · Foundations</strong></div><div class="milestone-row"><strong>Module 2 · Practice</strong></div><div class="milestone-row"><strong>Module 3 · Project</strong></div></div><button id="acceptCourse" class="cta-button full" type="button">Accept draft</button>';$("#acceptCourse").addEventListener("click",()=>{$("#appDialog").close();showToast("Course draft accepted")})});
 }
 
-function renderMap() {
-  els.phaseRail.replaceChildren();
-  Object.entries(phaseConfig).forEach(([key,phase]) => {
-    const button = document.createElement("button");
-    button.className = "phase-button";
-    button.classList.toggle("selected", state.selectedPhase === key);
-    const status = phase.progress >= 100 ? "Complete" : phase.progress > 0 ? "In progress" : "Locked";
-    button.innerHTML = `<span class="phase-biome">${phase.biome.slice(0,1)}</span>
-      <span><strong>${phase.title}</strong><small>${phase.biome}</small></span>
-      <span class="phase-state">${status}</span>`;
-    button.addEventListener("click", () => { state.selectedPhase = key; renderMap(); saveState(); });
-    els.phaseRail.append(button);
-  });
-  const phase = phaseConfig[state.selectedPhase];
-  els.selectedPhaseTitle.textContent = phase.title;
-  els.selectedPhaseDescription.textContent = phase.description;
-  els.phaseProgressFill.style.width = `${phase.progress}%`;
-  els.phaseProgressText.textContent = `${phase.progress}% complete · progress derives from real actions`;
-}
+$$(".tab").forEach(t=>t.addEventListener("click",()=>setView(t.dataset.target)));
+$("#waterPlus").addEventListener("click",()=>{state.water=Math.min(12,state.water+1);state.xp+=2;save();renderAll();showToast("+250 ml · +2 XP")});
+$("#waterMinus").addEventListener("click",()=>{state.water=Math.max(0,state.water-1);save();renderAll()});
+$("#completeNextButton").addEventListener("click",()=>{const n=state.actions.find(a=>!a.done);if(n)toggleAction(n.id)});
+$("#recoverButton").addEventListener("click",()=>{
+  openInfo("Recovery plan",'<p class="subtle">Keep historical progress and choose how to handle missed actions.</p><div class="milestone-list"><button class="signal-card" type="button" id="resumeRecovery"><strong>Resume</strong><span>Carry important actions forward.</span></button><button class="signal-card" type="button" id="rescheduleRecovery"><strong>Reschedule</strong><span>Move actions to another day.</span></button><button class="signal-card" type="button" id="skipRecovery"><strong>Skip intentionally</strong><span>Preserve history without overdue debt.</span></button></div>');
+  ["resumeRecovery","rescheduleRecovery","skipRecovery"].forEach(id=>$("#"+id)?.addEventListener("click",()=>{state.recovered=true;save();$("#appDialog").close();renderToday();showToast(id==="resumeRecovery"?"Recovery resumed":id==="rescheduleRecovery"?"Actions rescheduled":"Day skipped intentionally")}));
+});
+$("#addTaskInline").addEventListener("click",()=>$("#quickAddDialog").showModal());
+$("#quickAddButton").addEventListener("click",()=>$("#quickAddDialog").showModal());
+$("#quickAddForm").addEventListener("submit",e=>{
+  e.preventDefault();const title=$("#quickAddTitle").value.trim();if(!title)return;
+  state.actions.unshift({id:"a"+Date.now(),title,type:$("#quickAddType").value,domain:$("#quickAddDomain").value,xp:10,done:false});
+  $("#quickAddTitle").value="";save();$("#quickAddDialog").close();renderAll();showToast("Added to Today");
+});
+$("[data-open-module='health']").addEventListener("click",()=>{state.selectedModule="health";setView("life");renderLife()});
+$("#lowGameToggle").addEventListener("click",()=>{state.lowGame=!state.lowGame;save();renderMe();showToast(state.lowGame?"Low-game mode enabled":"Game theme restored")});
+$("#workspaceButton").addEventListener("click",()=>openInfo("Workspace & family",'<p class="subtle">Default workspace is private. Sharing is explicit and scoped.</p><div class="milestone-list"><div class="milestone-row done"><strong>Personal workspace · Private</strong></div><div class="milestone-row"><strong>Family workspace · Not configured</strong></div></div><button class="secondary-wide" type="button">Invite family member</button>'));
+$("#featureRequestButton").addEventListener("click",()=>openInfo("AI feature proposal",'<p class="subtle">Describe the feature. The AI creates a proposal; nothing enters the baseline without explicit admin approval.</p><form id="proposalForm" class="form-stack"><label>Request<input id="proposalText" required placeholder="I want…"></label><button class="cta-button full" type="submit">Generate proposal</button></form>'));
 
-function renderLife() {
-  els.moduleGrid.replaceChildren();
-  Object.entries(modules).forEach(([key,module]) => {
-    const button = document.createElement("button");
-    button.className = "module-button";
-    button.classList.toggle("active", state.selectedModule === key);
-    button.innerHTML = `<span>${module.icon}</span><strong>${module.title}</strong><small>${module.subtitle}</small>`;
-    button.addEventListener("click", () => { state.selectedModule = key; renderLife(); saveState(); });
-    els.moduleGrid.append(button);
-  });
-  renderModulePanel();
-}
+document.addEventListener("submit",e=>{
+  if(e.target?.id!=="proposalForm")return;
+  e.preventDefault();const text=$("#proposalText").value.trim();
+  state.proposals.push({text,status:"Draft"});save();
+  $("#dialogBody").innerHTML='<p class="eyebrow">AI DRAFT · HUMAN APPROVAL REQUIRED</p><h2>Candidate feature</h2><p>'+escapeHtml(text)+'</p><div class="milestone-list"><div class="milestone-row"><strong>Scope</strong>&nbsp; Mockup-only candidate</div><div class="milestone-row"><strong>Risk</strong>&nbsp; Must not modify baseline automatically</div><div class="milestone-row"><strong>Acceptance</strong>&nbsp; User confirms value before promotion</div></div><button id="keepProposal" class="cta-button full" type="button">Keep as draft</button>';
+  $("#keepProposal").addEventListener("click",()=>{$("#appDialog").close();showToast("Draft saved for review")});
+});
 
-function renderModulePanel() {
-  const key = state.selectedModule;
-  const title = modules[key].title;
-  let body = "";
-  if (key === "personal") {
-    body = `<p class="eyebrow">PERSONAL</p><h2>Weekly reset</h2><p class="muted">Keep routines, reflection and personal goals in one low-friction space.</p>
-      <div class="module-stat"><span>Weekly review</span><strong>Due Sunday</strong></div>
-      <div class="module-stat"><span>Personal goal</span><strong>62%</strong></div>
-      <button class="module-action" data-module-action="personal">Add quick reflection</button>`;
-  } else if (key === "work") {
-    body = `<p class="eyebrow">WORK</p><h2>Active project</h2><p class="muted">Professional tasks connect back to Career milestones.</p>
-      <div class="module-stat"><span>Focus block</span><strong>45 min</strong></div>
-      <div class="module-stat"><span>Project progress</span><strong>4 / 7</strong></div>
-      <button class="module-action" data-module-action="work">Complete focus block</button>`;
-  } else if (key === "health") {
-    const water = state.habits.water.value;
-    body = `<p class="eyebrow">HEALTH</p><h2>Body dashboard</h2><p class="muted">Manual logging now; integrations can replace it later.</p>
-      <div class="module-stat"><span>Water</span><strong>${water * 250} ml</strong></div>
-      <div class="module-stat"><span>Movement</span><strong>${state.habits.movement.done ? "Done" : "Pending"}</strong></div>
-      <button class="module-action" data-module-action="health">+ 250 ml water</button>`;
-  } else if (key === "finance") {
-    const pct = Math.min(100,Math.round(state.financeSaved/state.financeGoal*100));
-    body = `<p class="eyebrow">FINANCE</p><h2>Emergency fund</h2><p class="muted">Prototype projection; no banking integration yet.</p>
-      <div class="module-stat"><span>Saved</span><strong>$${state.financeSaved.toLocaleString()}</strong></div>
-      <div class="module-stat"><span>Goal</span><strong>$${state.financeGoal.toLocaleString()} · ${pct}%</strong></div>
-      <button class="module-action" data-module-action="finance">Simulate +$100</button>`;
-  } else if (key === "learning") {
-    body = `<p class="eyebrow">LEARNING</p><h2>Current course</h2><p class="muted">Course structure is staged for future link/AI import review.</p>
-      <div class="module-stat"><span>Lessons</span><strong>${state.learningLessons} / ${state.learningTotal}</strong></div>
-      <div class="module-stat"><span>Next</span><strong>Practice activity</strong></div>
-      <button class="module-action" data-module-action="learning">Complete lesson</button>`;
-  }
-  els.modulePanel.innerHTML = body;
-  els.modulePanel.querySelector("[data-module-action]")?.addEventListener("click", () => handleModuleAction(key));
-}
-
-function handleModuleAction(key) {
-  if (key === "health") toggleHabit("water");
-  if (key === "work") { awardXp(12,2); showToast("+12 XP · focus block complete"); }
-  if (key === "finance") { state.financeSaved += 100; showToast("Projection updated · +$100"); }
-  if (key === "learning") { state.learningLessons = Math.min(state.learningTotal, state.learningLessons + 1); awardXp(10,1); showToast("+10 XP · lesson complete"); }
-  if (key === "personal") { awardXp(5,0); showToast("+5 XP · reflection captured"); }
-  renderAll();
-}
-
-function renderInsights() {
-  els.weeklyXpMetric.textContent = state.weeklyXp;
-  const values = [45,70,35,82,60,92,68];
-  const days = ["M","T","W","T","F","S","S"];
-  els.weekChart.replaceChildren();
-  values.forEach((v,i) => {
-    const wrap = document.createElement("div");
-    wrap.className = "day-bar";
-    wrap.innerHTML = `<i style="height:${v}%"></i><small>${days[i]}</small>`;
-    els.weekChart.append(wrap);
-  });
-  const insights = [
-    "Your best days combine one important task with one health action.",
-    "Learning is most consistent when scheduled before the evening.",
-    "You are progressing without increasing daily administration time."
+$("#searchButton").addEventListener("click",()=>{$("#searchDialog").showModal();$("#searchInput").focus();renderSearch("")});
+$("#searchInput").addEventListener("input",e=>renderSearch(e.target.value));
+function renderSearch(q){
+  const hay=[
+    ...state.actions.map(a=>({title:a.title,meta:a.domain+" · "+a.type,view:"today"})),
+    ...Object.entries(state.phases).map(([k,p])=>({title:p.title,meta:"Goal phase · "+p.theme,view:"map",phase:k})),
+    ...Object.entries(modules).map(([k,m])=>({title:m.title,meta:"Life module",view:"life",module:k})),
+    ...state.course.lessons.map(l=>({title:l,meta:"Learning lesson",view:"life",module:"learning"}))
   ];
-  els.insightText.textContent = insights[state.insightIndex % insights.length];
+  const query=q.trim().toLowerCase();
+  const results=hay.filter(x=>!query||x.title.toLowerCase().includes(query)||x.meta.toLowerCase().includes(query)).slice(0,8);
+  const root=$("#searchResults");root.replaceChildren();
+  results.forEach(r=>{
+    const b=document.createElement("button");b.className="search-result";b.type="button";
+    b.innerHTML="<strong>"+escapeHtml(r.title)+"</strong><small>"+escapeHtml(r.meta)+"</small>";
+    b.addEventListener("click",()=>{if(r.phase)state.selectedPhase=r.phase;if(r.module)state.selectedModule=r.module;$("#searchDialog").close();state.activeView=r.view;renderAll()});
+    root.append(b);
+  });
 }
 
-function renderMe() {
-  els.xpValue.textContent = state.xp;
-  els.coinValue.textContent = state.coins;
-  els.levelValue.textContent = Math.max(1, Math.floor(state.xp / 100) + 3);
-  const skills = [
-    ["Consistency",78],["Health",54],["Career",66],["Learning",43]
-  ];
-  els.skillList.innerHTML = skills.map(([name,p]) => `<div class="skill-row"><strong>${name}</strong><div class="skill-meter"><i style="width:${p}%"></i></div></div>`).join("");
-  els.featureProposal.classList.toggle("hidden", !state.featureProposal);
-  if (state.featureProposal) {
-    els.featureProposal.innerHTML = `<strong>Candidate proposal · awaiting admin approval</strong>${state.featureProposal}<br><small>No baseline or production change has been made.</small>`;
-  }
-}
+$$(".signal-card").forEach(b=>b.addEventListener("click",()=>openInfo("Insight",'<p class="subtle">This signal is a prompt for review, not an automatic judgment. In later iterations it can deep-link into the underlying evidence.</p>')));
 
-function renderAll() {
-  renderToday();
-  renderMap();
-  renderLife();
-  renderInsights();
-  renderMe();
-  saveState();
-  requestAnimationFrame(updateDebugBridge);
-}
-
-function updateDebugBridge() {
-  window.__LEGACY_MVP_DEBUG__ = {
-    version:"0.1",
-    activeScreen:state.activeScreen,
-    selectedModule:state.selectedModule,
-    selectedPhase:state.selectedPhase,
-    xp:state.xp,
-    todos:{total:state.todos.length,done:state.todos.filter(t=>t.done).length},
-    habits:Object.fromEntries(Object.entries(state.habits).map(([k,v])=>[k,{done:v.done,value:v.value,target:v.target}])),
-    checks:{
-      fiveTopLevelDestinations:document.querySelectorAll(".nav-button").length===5,
-      allNavTargetsAtLeast44:[...document.querySelectorAll(".nav-button")].every(x=>x.getBoundingClientRect().height>=44),
-      allPrimaryModuleActionsAtLeast44:[...document.querySelectorAll(".module-action")].every(x=>x.getBoundingClientRect().height>=44),
-      persistenceAvailable:typeof localStorage!=="undefined",
-      recoveryNonDestructive:true
-    }
-  };
-}
-
-document.querySelectorAll(".nav-button").forEach(button => button.addEventListener("click", () => setScreen(button.dataset.nav)));
-document.querySelector("#profileButton").addEventListener("click", () => setScreen("me"));
-els.todoForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const label = els.todoInput.value.trim();
-  if (!label) return;
-  state.todos.unshift({id:crypto.randomUUID(),label,done:false});
-  els.todoInput.value="";
-  renderAll();
-});
-document.querySelector("#simulateMissedDay").addEventListener("click", () => { state.recoveryVisible=true; renderAll(); });
-document.querySelectorAll(".recovery-action").forEach(button => button.addEventListener("click", () => {
-  const action = button.dataset.recovery;
-  state.recoveryVisible=false;
-  showToast(action==="resume" ? "History preserved · resumed today" : action==="reschedule" ? "History preserved · items rescheduled" : "History preserved · day skipped");
-  renderAll();
-}));
-document.querySelector("#refreshInsight").addEventListener("click", () => { state.insightIndex++; renderInsights(); saveState(); });
-document.querySelector("#rewardButton").addEventListener("click", () => {
-  if (state.coins < 20) { els.rewardMessage.textContent="Not enough coins yet."; return; }
-  state.coins -= 20;
-  els.rewardMessage.textContent="Reward unlocked. The real action remains the source of progress.";
-  renderMe(); saveState();
-});
-els.featureForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const text = els.featureInput.value.trim();
-  if (!text) return;
-  state.featureProposal = `Feature: ${text}. Suggested scope: beta-only, with explicit acceptance criteria and privacy review.`;
-  els.featureInput.value="";
-  renderMe(); saveState();
-});
-els.undoButton.addEventListener("click", () => {
-  if (typeof state.lastUndo === "function") state.lastUndo();
-  els.toast.classList.add("hidden");
-  state.lastUndo=null;
-});
-
+window.addEventListener("pagehide",save);
 renderAll();
-setScreen(state.activeScreen);
