@@ -173,6 +173,7 @@ let sharedGoals=window.LegacySharedGoals.load();
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
 let toastTimer=null;
+let dialogReturnFocus=null;
 
 function save(){
   localStorage.setItem(APP_KEY,JSON.stringify(state));
@@ -188,6 +189,14 @@ function escapeHtml(value){
 }
 function formatMoney(value,currency=state.finance.currency){
   return new Intl.NumberFormat("en-US",{style:"currency",currency,maximumFractionDigits:2}).format(value);
+}
+function showDialog(dialog){
+  dialogReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
+  dialog.showModal();
+}
+function restoreDialogFocus(){
+  if(dialogReturnFocus&&document.contains(dialogReturnFocus)) dialogReturnFocus.focus();
+  dialogReturnFocus=null;
 }
 function showToast(message){
   const toast=$("#toast");
@@ -339,7 +348,7 @@ function openQuickAdd(domainLabel){
   populateDomainSelect();
   const normalized=normalizeDomainLabel(domainLabel||"Personal");
   $("#quickAddDomain").value=normalized;
-  $("#quickAddDialog").showModal();
+  showDialog($("#quickAddDialog"));
 }
 
 function moduleGoals(key){
@@ -538,7 +547,7 @@ function openInfo(title,body,eyebrow="MVP FLOW"){
   $("#appDialogEyebrow").textContent=eyebrow;
   $("#appDialogTitle").textContent=title;
   $("#dialogBody").innerHTML=body;
-  $("#appDialog").showModal();
+  showDialog($("#appDialog"));
 }
 
 function openRecovery(){
@@ -700,9 +709,11 @@ $("[data-open-module='health']").addEventListener("click",()=>{state.selectedMod
 $("#lowGameToggle").addEventListener("click",()=>{state.lowGame=!state.lowGame;save();renderAll();showToast(state.lowGame?"Low-gamification mode enabled":"Game presentation restored")});
 $("#workspaceButton").addEventListener("click",openWorkspace);
 $("#featureRequestButton").addEventListener("click",openFeatureGovernance);
-$("#searchButton").addEventListener("click",()=>{$("#searchDialog").showModal();$("#searchInput").value="";renderSearch("");$("#searchInput").focus()});
+$("#searchButton").addEventListener("click",()=>{showDialog($("#searchDialog"));$("#searchInput").value="";renderSearch("");$("#searchInput").focus()});
 $("#searchInput").addEventListener("input",e=>renderSearch(e.target.value));
 $$(".signal-card").forEach(button=>button.addEventListener("click",()=>openInfo("Insight source",'<p class="subtle">This is a prototype review signal. Values are either derived from local editable state or explicitly marked illustrative; no external analytics service is connected.</p>',"INSIGHTS · SOURCE BOUNDARY")));
+
+[$("#appDialog"),$("#quickAddDialog"),$("#searchDialog")].forEach(dialog=>dialog.addEventListener("close",restoreDialogFocus));
 
 window.addEventListener("storage",event=>{
   if(event.key===window.LegacySharedGoals.KEY){reloadShared();renderMap()}
