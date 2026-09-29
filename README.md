@@ -1,6 +1,8 @@
-# LEGACY Mockups
+# Legavia Mockups
 
-Disposable, low-fidelity prototypes used to validate workflows before they enter the main LEGACY product backlog or architecture.
+Disposable, low-fidelity prototypes used to validate workflows before they enter the main Legavia product backlog or architecture.
+
+> **Brand namespace note:** The product is **Legavia**. The repository remains `legacy_mockups`, and existing `LEGACY-*` traceability IDs, storage keys, debug globals, snapshots, and historical audit identifiers remain unchanged until a dedicated namespace migration.
 
 ## Current mockup: Daily Todo + Water Tracker
 
@@ -13,7 +15,7 @@ The prototype is intentionally dependency-free. Data is stored only in the brows
 
 ## Scope boundary
 
-This repository is **not** the main LEGACY application and should not be treated as production implementation. Findings from these mockups are inputs for future feedback, discovery, and new use cases only.
+This repository is **not** the main Legavia application and should not be treated as production implementation. Findings from these mockups are inputs for future feedback, discovery, and new use cases only.
 
 ## Run locally
 
