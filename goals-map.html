@@ -3,155 +3,39 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#123f4b" />
-  <title>LEGACY Mockup — Goals Map</title>
-  <link rel="stylesheet" href="goals-map.css" />
+  <meta name="theme-color" content="#03131d" />
+  <title>LEGACY — World Map</title>
+  <link rel="stylesheet" href="geek.css" />
 </head>
-<body>
-  <main class="map-shell">
-    <header class="map-header">
-      <div>
-        <p class="kicker">LEGACY · WORLD 01</p>
-        <h1>Goals Map</h1>
+<body data-page="map">
+  <main class="world-shell">
+    <div class="world-toolbar">
+      <a href="./">‹ Back</a>
+      <div class="world-title"><div style="color:#ffc85c;font-size:22px">♛</div><h1>World Map</h1><p>EXPLORE · GROW · BUILD A BRIGHTER TOMORROW</p></div>
+      <button class="regions" type="button" data-fit>⚑ <span data-region-count>3 / 5</span> REGIONS</button>
+    </div>
+    <div class="map-help">Drag to explore · pinch/wheel to zoom · tap an island</div>
+    <div class="map-viewport" data-viewport aria-label="Interactive world map">
+      <div class="map-canvas" data-canvas>
+        <span class="path-node p1"></span><span class="path-node p2"></span><span class="path-node p3"></span><span class="path-node p4"></span><span class="path-node p5"></span>
+        <button class="island-hotspot island-foundation" type="button" data-phase="foundation"><span class="island-label"><strong>🌿 FOUNDATION</strong><small><span data-phase-pct="foundation">0</span>% COMPLETE</small></span></button>
+        <button class="island-hotspot island-health" type="button" data-phase="health"><span class="island-label"><strong>❤️ HEALTH</strong><small><span data-phase-pct="health">0</span>% COMPLETE</small></span></button>
+        <button class="island-hotspot island-career" type="button" data-phase="career"><span class="island-label"><strong>💼 CAREER</strong><small><span data-phase-pct="career">0</span>% COMPLETE</small></span></button>
+        <button class="island-hotspot island-wealth" type="button" data-phase="wealth"><span class="island-label"><strong>🪙 WEALTH</strong><small><span data-phase-pct="wealth">0</span>% COMPLETE</small></span></button>
+        <button class="island-hotspot island-legacy" type="button" data-phase="legacy"><span class="island-label"><strong>♛ LEGACY</strong><small><span data-phase-pct="legacy">0</span>% COMPLETE</small></span></button>
       </div>
-      <div class="header-actions">
-        <a class="pixel-icon-button" href="./index.html" aria-label="Back to Today" title="Back to Today">⌂</a>
-        <button id="resetMapButton" class="pixel-icon-button" type="button" aria-label="Reset goals map" title="Reset goals map">↺</button>
+    </div>
+
+    <section class="map-card">
+      <div class="map-card-main">
+        <div class="map-thumb" data-map-icon>💼</div>
+        <div><p class="pixel-kicker" data-map-theme>CITADEL</p><h2 data-map-title>Career</h2><p data-map-tagline>Build mastery and meaningful professional impact.</p></div>
+        <div><strong><span data-map-pct>0</span>%</strong><p>COMPLETE</p></div>
       </div>
-    </header>
-
-    <section class="world-map" aria-label="Goal phases world map">
-      <div class="map-grain" aria-hidden="true"></div>
-      <div class="current-marker" aria-hidden="true">YOU</div>
-
-      <div class="route route-1" aria-hidden="true"></div>
-      <div class="route route-2" aria-hidden="true"></div>
-      <div class="route route-3" aria-hidden="true"></div>
-      <div class="route route-4" aria-hidden="true"></div>
-
-      <article class="island biome-meadow island-foundation" data-phase="foundation">
-        <button class="island-select" type="button" data-select-phase="foundation" aria-label="Select Foundation phase">
-          <span class="biome-scene" aria-hidden="true">
-            <span class="meadow-hill"></span>
-            <span class="cabin"><i></i></span>
-            <span class="pine pine-a"></span>
-            <span class="pine pine-b"></span>
-            <span class="flag">⚑</span>
-          </span>
-          <span class="phase-label"><small>MEADOW</small>Foundation</span>
-        </button>
-        <div class="milestones" aria-label="Foundation milestones">
-          <button class="milestone" type="button" data-phase="foundation" data-index="0" aria-label="Foundation milestone 1"></button>
-          <button class="milestone" type="button" data-phase="foundation" data-index="1" aria-label="Foundation milestone 2"></button>
-          <button class="milestone" type="button" data-phase="foundation" data-index="2" aria-label="Foundation milestone 3"></button>
-        </div>
-      </article>
-
-      <article class="island biome-jungle island-health" data-phase="health">
-        <button class="island-select" type="button" data-select-phase="health" aria-label="Select Health phase">
-          <span class="biome-scene" aria-hidden="true">
-            <span class="jungle-canopy canopy-a"></span>
-            <span class="jungle-canopy canopy-b"></span>
-            <span class="waterfall"></span>
-            <span class="heart-stone">♥</span>
-          </span>
-          <span class="phase-label"><small>JUNGLE</small>Health</span>
-        </button>
-        <div class="milestones" aria-label="Health milestones">
-          <button class="milestone" type="button" data-phase="health" data-index="0" aria-label="Health milestone 1"></button>
-          <button class="milestone" type="button" data-phase="health" data-index="1" aria-label="Health milestone 2"></button>
-          <button class="milestone" type="button" data-phase="health" data-index="2" aria-label="Health milestone 3"></button>
-        </div>
-      </article>
-
-      <article class="island biome-harbor island-career" data-phase="career">
-        <button class="island-select" type="button" data-select-phase="career" aria-label="Select Career phase">
-          <span class="biome-scene" aria-hidden="true">
-            <span class="city-block block-a"></span>
-            <span class="city-block block-b"></span>
-            <span class="crane"></span>
-            <span class="dock"></span>
-            <span class="career-flag">⚑</span>
-          </span>
-          <span class="phase-label"><small>HARBOR</small>Career</span>
-        </button>
-        <div class="milestones" aria-label="Career milestones">
-          <button class="milestone" type="button" data-phase="career" data-index="0" aria-label="Career milestone 1"></button>
-          <button class="milestone" type="button" data-phase="career" data-index="1" aria-label="Career milestone 2"></button>
-          <button class="milestone" type="button" data-phase="career" data-index="2" aria-label="Career milestone 3"></button>
-          <button class="milestone" type="button" data-phase="career" data-index="3" aria-label="Career milestone 4"></button>
-        </div>
-      </article>
-
-      <article class="island biome-mine island-wealth" data-phase="wealth">
-        <button class="island-select" type="button" data-select-phase="wealth" aria-label="Select Wealth phase">
-          <span class="biome-scene" aria-hidden="true">
-            <span class="rock rock-a"></span>
-            <span class="rock rock-b"></span>
-            <span class="mine-mouth"></span>
-            <span class="rail"></span>
-            <span class="ore ore-a">◆</span>
-            <span class="ore ore-b">◆</span>
-          </span>
-          <span class="phase-label"><small>MINES</small>Wealth</span>
-        </button>
-        <div class="milestones" aria-label="Wealth milestones">
-          <button class="milestone" type="button" data-phase="wealth" data-index="0" aria-label="Wealth milestone 1"></button>
-          <button class="milestone" type="button" data-phase="wealth" data-index="1" aria-label="Wealth milestone 2"></button>
-          <button class="milestone" type="button" data-phase="wealth" data-index="2" aria-label="Wealth milestone 3"></button>
-        </div>
-      </article>
-
-      <article class="island biome-ruins island-legacy" data-phase="legacy">
-        <button class="island-select" type="button" data-select-phase="legacy" aria-label="Select Legacy phase">
-          <span class="biome-scene" aria-hidden="true">
-            <span class="ruin-column column-a"></span>
-            <span class="ruin-column column-b"></span>
-            <span class="temple-gate"></span>
-            <span class="torch torch-a"></span>
-            <span class="torch torch-b"></span>
-          </span>
-          <span class="phase-label"><small>RUINS</small>Legacy</span>
-        </button>
-        <div class="milestones" aria-label="Legacy milestones">
-          <button class="milestone" type="button" data-phase="legacy" data-index="0" aria-label="Legacy milestone 1"></button>
-          <button class="milestone" type="button" data-phase="legacy" data-index="1" aria-label="Legacy milestone 2"></button>
-          <button class="milestone" type="button" data-phase="legacy" data-index="2" aria-label="Legacy milestone 3"></button>
-        </div>
-      </article>
-
-      <div class="map-decoration boat" aria-hidden="true">◢</div>
-      <div class="map-decoration reef reef-a" aria-hidden="true"></div>
-      <div class="map-decoration reef reef-b" aria-hidden="true"></div>
+      <a class="neon-cta" data-continue href="./island?phase=career">▶ Continue in Career</a>
     </section>
-
-    <section id="phaseCard" class="phase-card" aria-live="polite">
-      <div class="phase-card-copy">
-        <p class="card-kicker">CURRENT PHASE</p>
-        <h2 id="phaseTitle">Career</h2>
-        <p id="phaseSubtitle">Build mastery and meaningful professional impact.</p>
-        <p class="milestone-count"><strong id="phaseCompleted">2</strong>/<strong id="phaseTotal">4</strong> milestones</p>
-      </div>
-      <button id="openPhaseButton" class="continue-button" type="button" aria-label="Open selected phase">›</button>
-      <div class="pixel-progress" aria-hidden="true">
-        <span id="phaseProgress"></span>
-      </div>
-    </section>
-
-    <p class="prototype-note">Tap a region to travel. Tap a node to mark progress. This route shares milestone state with the main MVP and stores it only in this browser.</p>
   </main>
-
-  <dialog id="phaseDialog" class="phase-dialog" aria-labelledby="dialogTitle">
-    <form method="dialog">
-      <button class="dialog-close" value="close" aria-label="Close phase details">×</button>
-    </form>
-    <p class="dialog-kicker">PHASE DETAIL</p>
-    <h2 id="dialogTitle">Career</h2>
-    <p id="dialogDescription"></p>
-    <div id="dialogMilestones" class="dialog-milestones"></div>
-    <button id="dialogDoneButton" class="dialog-done" type="button">BACK TO MAP</button>
-  </dialog>
-
-  <script src="shared-state.js"></script>\n  <script src="goals-map.js"></script>
+  <script src="geek-state.js"></script>
+  <script src="world-map.js"></script>
 </body>
 </html>
