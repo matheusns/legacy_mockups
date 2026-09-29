@@ -1,0 +1,36 @@
+{
+  "artifact": "LEGACY-MOCKUP-MVP-STATE",
+  "version": "0.2",
+  "status": "feedback-candidate",
+  "date": "2026-09-29",
+  "scope": "legacy_mockups-only",
+  "reference_baseline": "LEGACY-REF-UX-001",
+  "top_level_navigation": ["Today", "Map", "Life", "Insights", "Me"],
+  "life_modules": ["Personal", "Work", "Health", "Finance", "Learning", "Relationships"],
+  "functional_prototypes": [
+    "next-best action",
+    "task and habit completion/undo",
+    "quick add with domain",
+    "hydration logging",
+    "continuity and missed-day recovery",
+    "calendar context",
+    "phase/milestone navigation",
+    "themed full-map deep link",
+    "health summary",
+    "finance projection assumptions",
+    "learning course/import review",
+    "cross-domain insights",
+    "global XP and domain skills",
+    "optional coin/reward economy",
+    "low-gamification mode",
+    "private-first workspace/family concept",
+    "AI feature proposal draft",
+    "global search",
+    "localStorage persistence"
+  ],
+  "skills_under_test": [
+    "SK-UX-01","SK-UX-02","SK-UX-03","SK-UX-04","SK-UX-05","SK-UX-06","SK-UX-07","SK-UX-08",
+    "SK-QA-01","SK-PROD-01","SK-AI-01","SK-SEC-01"
+  ],
+  "next_gate": "user_feedback_after_e2e"
+}
