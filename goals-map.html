@@ -138,10 +138,10 @@
       </div>
     </section>
 
-    <p class="prototype-note">Tap a region to travel. Tap a node to mark progress.</p>
+    <p class="prototype-note">Tap a region to travel. Tap a node to mark progress. This route shares milestone state with the main MVP and stores it only in this browser.</p>
   </main>
 
-  <dialog id="phaseDialog" class="phase-dialog">
+  <dialog id="phaseDialog" class="phase-dialog" aria-labelledby="dialogTitle">
     <form method="dialog">
       <button class="dialog-close" value="close" aria-label="Close phase details">×</button>
     </form>
@@ -152,6 +152,6 @@
     <button id="dialogDoneButton" class="dialog-done" type="button">BACK TO MAP</button>
   </dialog>
 
-  <script src="goals-map.js"></script>
+  <script src="shared-state.js"></script>\n  <script src="goals-map.js"></script>
 </body>
 </html>
