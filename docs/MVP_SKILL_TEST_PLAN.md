@@ -1,99 +1,75 @@
 # LEGACY Mockup Skill & Version Test Plan
 
 Status: active mockup plan  
+Current candidate: **MVP 0.2 — Integrated coherent core**  
 Baseline reference: `LEGACY-REF-UX-001` from the main LEGACY repository  
 Scope: mockups only; no production-domain baseline decisions are implied.
 
 ## Skills to test
 
-| Skill | What the mockup must exercise | Evidence |
+| Skill | What the mockup exercises | Acceptance evidence |
 |---|---|---|
-| SK-UX-01 Information Architecture | Today / Map / Life / Insights / Me; one-tap top-level navigation; module context | navigation E2E |
-| SK-UX-02 Interaction Design | dominant primary action, undo, recovery, empty/populated states, module quick actions | task/habit/recovery flows |
-| SK-UX-03 Design System | shared cards, spacing, typography, buttons, states, responsive shell | visual regression |
-| SK-UX-04 Gamification Economy | XP, coins, skills, rewards, map progression derived from real actions | progression simulation |
-| SK-UX-05 Behavioral Design | small steps, low-friction logging, soft failure, recovery after miss | missed-day scenario |
-| SK-UX-06 Accessibility | >=44px critical targets, contrast, semantics, reduced motion, tap-only map path | browser audit |
-| SK-UX-07 Data Visualization | 7-day rhythm, progress bars, continuity and administration-time indicators | insight review |
-| SK-UX-08 Motion & Microinteraction | completion toast, selected states, progress feedback, reduced-motion equivalent | visual + reduced motion |
-| SK-QA-01 Browser E2E & Visual Regression | critical paths, persistence, responsive layout, reload behavior | automated browser suite |
-| SK-PROD-01 Product Analytics & Experiments | friction hypotheses and metrics visible in prototype | version comparison |
-| SK-AI-01 AI Requirement Capture | feature text -> structured proposal -> explicit approval boundary | governance scenario |
-| SK-SEC-01 Privacy & Multi-user Isolation | private-by-default workspace controls and future family boundary | UI/privacy review |
+| SK-UX-01 Information Architecture | Today / Map / Life / Insights / Me; deep links and preserved context | one-tap navigation + state persistence |
+| SK-UX-02 Interaction Design | primary actions, completion/undo, quick add, dialogs, recovery choices | browser critical-flow run |
+| SK-UX-03 Design System | shared cards, spacing, typography, action hierarchy, responsive shell | visual regression + consistency review |
+| SK-UX-04 Gamification Economy | XP, skills, coins, rewards, map milestones | progression simulation; core actions remain ungated |
+| SK-UX-05 Behavioral Design | continuity, recovery, small steps, nonpunitive missed-day handling | recovery scenario |
+| SK-UX-06 Accessibility | target sizing, semantics, contrast, non-color states, reduced motion | mobile accessibility smoke test |
+| SK-UX-07 Data Visualization | completion ring, domain bars, financial projection | glanceability/readability test |
+| SK-UX-08 Motion & Microinteraction | toast feedback, selected states, progress updates | visual test + reduced-motion check |
+| SK-QA-01 Browser E2E & Visual Regression | navigation, persistence, critical flows, mobile layout | automated production run |
+| SK-PROD-01 Product Analytics & Experiments | completion/admin-friction hypotheses | version comparison criteria |
+| SK-AI-01 AI Requirement Capture | text request → structured draft → human approval boundary | governance flow |
+| SK-SEC-01 Privacy & Multi-user Isolation | private-first workspace/family concept | privacy comprehension test |
 
-## Versioned experiment plan
+## MVP 0.2 scope
 
-### MVP 0.1 — Coherent core (current)
-Goal: validate whether all major product areas feel like one system.
+The root mockup intentionally covers a broad first coherent slice instead of optimizing Map in isolation:
 
-Includes:
-- Today: tasks, habits, calendar context, recovery flow, undo.
-- Map: integrated phase navigation plus deep thematic world-map route.
-- Life: Personal, Work, Health, Finance, Learning module prototypes.
-- Insights: continuity, weekly XP, admin-time indicator, 7-day rhythm and review insight.
-- Me: XP, coins, skill meters, reward unlock, private-first settings, AI feature proposal.
-- Persistent five-destination shell.
-- Browser-local persistence.
+- **Today:** next-best action, tasks/habits, one-tap completion/undo, quick add, hydration, continuity, calendar context, missed-day recovery.
+- **Map:** phase/milestone progression plus deep link to the full themed 8-bit world map.
+- **Life:** Personal, Work, Health, Finance, Learning, Relationships module hub using the same interaction grammar.
+- **Finance:** assumptions + simple goal projection.
+- **Learning:** course/lesson representation and AI-assisted import that requires review.
+- **Insights:** weekly completion and domain progress signals.
+- **Me:** global XP, domain skills, optional coin/reward loop, low-gamification mode, workspace/family concept, AI feature request draft.
+- **Global:** search across actions, phases, modules, and lessons; local browser persistence.
 
-Primary questions:
-1. Is the five-tab shell obvious on a phone?
-2. Can the daily loop be operated faster than maintaining it?
-3. Does Map feel motivational without contaminating operational screens?
-4. Does Life feel coherent rather than five unrelated mini-apps?
-5. Are XP/rewards useful feedback or distracting?
-6. Is recovery after a missed day understandable?
-7. Does the AI proposal workflow clearly stop before approval?
+## Versioned experiments
 
-### MVP 0.2 — Friction & recovery
-Apply user feedback from 0.1.
-Test:
-- single-tap completion rate,
-- undo discoverability,
-- inactive-day recovery choices,
-- empty/error/disabled states,
-- whether Today needs calendar + tasks together,
-- whether module quick actions are enough.
+### 0.3A — Productivity-first / low-game
+Reduce decorative game treatment while keeping all flows identical. Test speed, clarity, cognitive load, and whether motivation drops.
 
-### MVP 0.3 — Game-depth experiment
-A/B conceptual variants:
-- A: restrained game layer (current thesis),
-- B: deeper RPG economy with quests/rewards,
-- C: neutral/minimal mode.
-Measure preference, comprehension, and perceived administration overhead.
+### 0.3B — Game-rich progression
+Increase richness only on Map and Me: quests, stronger unlock feedback, thematic rewards. Keep Today and Life restrained. Test motivation versus distraction.
 
-### MVP 0.4 — Automation & integration simulation
-Prototype provenance-based auto-completion:
-- Calendar event completion,
-- health signal ingestion,
-- course activity completion,
-- duplicate-event protection.
-No real external account integration required at mockup stage.
+### 0.4 — Recovery & planning
+Deepen routines, reschedule/skip semantics, weekly quests, missed-day handling, and next-best-action explanation.
 
-### MVP 0.5 — Multi-user + governance
-Prototype:
-- family workspace,
-- per-goal sharing,
-- permission-denied states,
-- admin review of AI-generated feature proposals,
-- beta approval workflow.
+### 0.5 — Multi-user + AI governance
+Add two mock identities, family goal sharing, permission-denied states, admin approve/reject, and beta status for AI-generated feature proposals.
 
-## Acceptance suite for MVP 0.1
+## MVP 0.2 acceptance suite
 
-1. Navigate all five top-level destinations in one tap each.
-2. Add, complete, undo, and delete a task.
-3. Complete/log all three habit types and verify XP changes exactly once per meaningful action.
-4. Simulate missed day and choose a recovery action without deleting history.
-5. Select every map phase and open the full world map.
-6. Open every Life module and execute its quick action.
-7. Verify Finance and Learning state changes persist after reload.
-8. Verify Insights update weekly XP after actions.
-9. Spend coins on a reward and verify balance.
-10. Generate an AI feature proposal and verify it remains explicitly unapproved.
-11. Reload and verify active top-level destination + state persistence.
-12. Check critical touch targets >=44 px and reduced-motion support.
-13. Confirm rich pixel theme remains confined to Map/reward moments.
-14. Verify no horizontal clipping at common phone widths.
+1. **MVP-FVT-001 — Daily execution:** complete an action; XP changes once; tap again to undo.
+2. **MVP-FVT-002 — Shell navigation:** all five top-level destinations reachable in one tap.
+3. **MVP-FVT-003 — Navigation persistence:** selected tab/module/phase survives reload.
+4. **MVP-FVT-004 — Quick add:** create a task/habit with domain context and see it in Today/search.
+5. **MVP-FVT-005 — Hydration:** increment/decrement and preserve state.
+6. **MVP-FVT-006 — Recovery:** resume/reschedule/skip without destructive reset.
+7. **MVP-FVT-007 — Map:** select all phases, update milestone, open full map.
+8. **MVP-FVT-008 — Life modules:** open all six modules without switching interaction grammar.
+9. **MVP-FVT-009 — Finance:** change user-entered assumption and see projection update.
+10. **MVP-FVT-010 — Learning:** simulated import cannot become authoritative until explicit acceptance.
+11. **MVP-FVT-011 — Insights:** completion changes are reflected in summary.
+12. **MVP-FVT-012 — Economy:** reward redemption changes coins but never gates core actions.
+13. **MVP-FVT-013 — Low-game mode:** removes decorative game emphasis without removing functionality.
+14. **MVP-FVT-014 — Search:** query action, phase, module and lesson; result navigates to correct context.
+15. **MVP-FVT-015 — AI governance:** generated feature remains Draft and explicitly states human approval is required.
+16. **MVP-FVT-016 — Privacy:** workspace/family UI communicates Private by default and explicit sharing.
+17. **MVP-FVT-017 — Accessibility:** critical mobile controls, contrast, labels and reduced-motion behavior pass smoke audit.
+18. **MVP-FVT-018 — Reload persistence:** tasks, water, XP, phase/module selection and low-game setting persist.
 
 ## Feedback gate
 
-MVP 0.1 becomes a frozen mockup snapshot after the first E2E run. No main LEGACY requirements are changed from mockup feedback until the user explicitly promotes a finding/use case.
+After MVP 0.2 is deployed and the acceptance suite has been run, freeze its snapshot and request user feedback. Do not choose 0.3A, 0.3B, or a hybrid until that feedback is received.
