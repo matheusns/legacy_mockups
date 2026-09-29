@@ -1,0 +1,13 @@
+{
+  "artifact": "LEGACY-GEEK-MOCKUP-STATE",
+  "version": "0.4",
+  "status": "deployed-user-review",
+  "date": "2026-09-30",
+  "deployment": "https://legacy-mockups.vercel.app/",
+  "routes": ["/", "/goals-map", "/island?phase=career", "/focus"],
+  "visual_reference": "docs/references/geek-ui-reference-board.webp",
+  "work_packages": ["WORK-GEEK-001","WORK-GEEK-002","WORK-GEEK-003","WORK-GEEK-004","WORK-GEEK-005"],
+  "skills": ["SK-UI-09","SK-UX-09","SK-UX-10","SK-BEH-06","SK-STATE-02","SK-ART-01"],
+  "browser_smoke": "pass-with-explicit-limitations",
+  "next_gate": "user_feedback"
+}
