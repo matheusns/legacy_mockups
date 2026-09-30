@@ -1,0 +1,29 @@
+{
+  "artifact": "LEGACY-IMAGE-FIRST-UI-STATE",
+  "version": "0.5",
+  "status": "deployed-user-review",
+  "date": "2026-09-30",
+  "deployment": "https://legacy-mockups.vercel.app/",
+  "strategy": "approved-figures-rendered-directly-with-transparent-functional-hotspots",
+  "routes": {
+    "home": "/",
+    "world_map": "/goals-map",
+    "career_island": "/island?phase=career",
+    "focus": "/focus"
+  },
+  "assets": {
+    "home": "assets/screens/home.webp",
+    "world_map": "assets/screens/world-map.webp",
+    "career_island": "assets/screens/island-career.webp",
+    "focus": "assets/screens/focus.webp"
+  },
+  "shared_state_key": "legacy-geek-v0.4",
+  "production_browser_result": "PASS",
+  "remaining_visual_scope": [
+    "Foundation exact island-detail artwork",
+    "Health exact island-detail artwork",
+    "Wealth exact island-detail artwork",
+    "Legacy exact island-detail artwork"
+  ],
+  "next_gate": "user_visual_feedback"
+}
