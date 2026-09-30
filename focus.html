@@ -3,78 +3,50 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#03131d" />
+  <meta name="theme-color" content="#020a10" />
   <title>LEGACY — Focus Forest</title>
-  <link rel="stylesheet" href="geek.css" />
+  <link rel="preload" as="image" href="./assets/screens/focus.webp" />
+  <link rel="stylesheet" href="./image-ui.css" />
 </head>
-<body data-page="focus">
-  <main class="app-frame">
-    <header class="hud-header">
-      <a class="brand-lockup" href="./"><span class="brand-crown">♛</span><strong>LEGACY</strong><small>A BETTER YOU LEAVES A BRIGHTER TOMORROW</small></a>
-      <div class="hud-actions"><button class="hud-icon" type="button" data-reset-timer aria-label="Reset timer">↺</button><button class="avatar-button" type="button"><span class="pixel-avatar">🧑🏻‍💻</span><small>Lv. <b>12</b></small></button></div>
-    </header>
+<body>
+  <main class="screen-shell" aria-label="LEGACY Focus Forest">
+    <img class="screen-img" src="./assets/screens/focus.webp" alt="LEGACY Focus Forest with Pomodoro timer, glowing tree, session stats and current task" />
 
-    <section class="pixel-panel" style="padding:14px 16px;margin-bottom:12px">
-      <div style="display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center">
-        <div class="map-thumb" data-current-icon>💼</div>
-        <div><p class="pixel-kicker" data-current-island>CAREER ISLAND</p><h2 style="margin:4px 0" data-current-task>Work on Project Proposal</h2><p style="margin:0;color:#91a9b8">Make progress for a future you're proud of.</p></div>
-        <a class="small-button" data-view-goal href="./island?phase=career" style="padding:12px;text-decoration:none;border:1px solid #24566b;border-radius:10px">View Goal ›</a>
+    <button class="hit focus-search" type="button" data-search><span class="hit-label">Search</span></button>
+    <button class="hit focus-settings" type="button" data-settings><span class="hit-label">Focus settings</span></button>
+    <button class="hit focus-profile" type="button" data-profile><span class="hit-label">Explorer profile</span></button>
+
+    <div class="focus-timer-overlay" data-timer aria-live="polite">25:00</div>
+
+    <button class="hit focus-mode-pomodoro focus-mode-selected" type="button" data-mode="pomodoro" data-minutes="25"><span class="hit-label">Pomodoro 25 minutes</span></button>
+    <button class="hit focus-mode-short" type="button" data-mode="short" data-minutes="5"><span class="hit-label">Short Break 5 minutes</span></button>
+    <button class="hit focus-mode-long" type="button" data-mode="long" data-minutes="15"><span class="hit-label">Long Break 15 minutes</span></button>
+    <button class="hit focus-mode-custom" type="button" data-mode="custom" data-minutes="50"><span class="hit-label">Deep Work 50 minutes</span></button>
+    <button class="hit focus-start" type="button" data-start><span class="hit-label">Start or pause focus session</span></button>
+    <button class="hit focus-reset" type="button" data-reset><span class="hit-label">Reset timer</span></button>
+
+    <button class="hit focus-current-task" type="button" data-current-task><span class="hit-label">Open current task and choose task</span></button>
+    <button class="hit focus-history" type="button" data-history><span class="hit-label">Open session history</span></button>
+    <button class="hit focus-mark" type="button" data-mark><span class="hit-label">Mark current task progress after a completed focus session</span></button>
+
+    <a class="hit focus-nav-home" href="./"><span class="hit-label">Home</span></a>
+    <a class="hit focus-nav-map" href="./goals-map"><span class="hit-label">World Map</span></a>
+    <a class="hit focus-nav-goals" href="./island?phase=career"><span class="hit-label">Goals</span></a>
+    <a class="hit focus-nav-focus" href="./focus"><span class="hit-label">Focus</span></a>
+    <button class="hit focus-nav-tasks" type="button" data-current-task><span class="hit-label">Tasks</span></button>
+    <button class="hit focus-nav-journal" type="button" data-journal><span class="hit-label">Journal</span></button>
+
+    <dialog class="ui-sheet" id="genericDialog" aria-labelledby="genericTitle">
+      <div class="sheet-head">
+        <div><p>FOCUS FOREST</p><h2 id="genericTitle">Details</h2></div>
+        <form method="dialog"><button class="sheet-close" value="close" aria-label="Close">×</button></form>
       </div>
-    </section>
-
-    <section class="focus-hero pixel-panel">
-      <div class="focus-quote">A CLEAR MIND<br>PLANTS A BRIGHTER<br>TOMORROW. 🌿</div>
-      <div class="forest-stage">
-        <div class="forest-tree" data-tree>🌳</div>
-        <div class="focus-timer" data-timer>25:00</div>
-        <div class="timer-mode" data-mode-label>🍅 Focus Session</div>
-        <div class="mode-tabs">
-          <button class="active" type="button" data-mode="focus" data-minutes="25">🍅 Pomodoro<br><small>25 min</small></button>
-          <button type="button" data-mode="short" data-minutes="5">☕ Short Break<br><small>5 min</small></button>
-          <button type="button" data-mode="long" data-minutes="15">🌲 Long Break<br><small>15 min</small></button>
-          <button type="button" data-mode="custom" data-minutes="50">⚙ Custom<br><small>50 min</small></button>
-        </div>
-        <button class="neon-cta start-focus" type="button" data-start>▶ Start Focus Session</button>
-      </div>
-    </section>
-
-    <section class="focus-stats">
-      <article class="focus-stat"><b>🔥 <span data-streak>21</span></b><small>Day Streak</small></article>
-      <article class="focus-stat"><b>🌳 <span data-trees>12</span></b><small>Trees Planted</small></article>
-      <article class="focus-stat"><b>▥ <span data-session-count>7</span></b><small>Focus Sessions Today</small></article>
-    </section>
-
-    <section class="focus-bottom-grid">
-      <article class="pixel-panel current-task-panel">
-        <div class="panel-heading"><div><span class="blue-icon">☑</span><h2>Current Task</h2></div><a data-change-task href="./island?phase=career" style="color:#9ec3d7;text-decoration:none">Change Task ›</a></div>
-        <h3 data-current-task-2 style="margin:12px 0 3px">Work on Project Proposal</h3>
-        <p style="margin:0;color:#8ca9bb">Break the quest into focused steps.</p>
-        <div data-focus-subtasks></div>
-      </article>
-      <article class="pixel-panel history-panel">
-        <div class="panel-heading"><div><span class="blue-icon">◷</span><h2>Session History</h2></div></div>
-        <div data-history></div>
-      </article>
-    </section>
-
-    <section class="forest-footer pixel-panel">
-      <div class="forest-growth"><span>🌳</span><div><strong>Complete this session to grow your forest!</strong><p style="margin:3px 0;color:#8fb0c0">Every completed focus block plants one tree.</p></div></div>
-      <button class="mark-progress" type="button" data-mark-progress disabled>☑ Mark Progress</button>
-    </section>
-
-    <nav class="game-nav" aria-label="Primary navigation">
-      <a href="./"><span>⌂</span>Home</a>
-      <a href="./goals-map"><span>🗺</span>World Map</a>
-      <a href="./island?phase=career"><span>◎</span>Goals</a>
-      <a class="active" href="./focus"><span>🌿</span>Focus</a>
-      <button type="button" data-tasks><span>☑</span>Tasks</button>
-      <button type="button" data-journal><span>▤</span>Journal</button>
-    </nav>
+      <div class="sheet-body" data-generic-body></div>
+    </dialog>
   </main>
 
-  <dialog class="modal" id="genericDialog"><form method="dialog"><button class="modal-close" value="close">×</button></form><div data-generic-body></div></dialog>
   <div class="toast" data-toast hidden></div>
-  <script src="geek-state.js"></script>
-  <script src="focus.js"></script>
+  <script src="./geek-state.js"></script>
+  <script src="./image-focus.js"></script>
 </body>
 </html>
