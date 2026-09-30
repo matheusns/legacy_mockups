@@ -3,39 +3,48 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#03131d" />
-  <title>LEGAVIA — World Map</title>
-  <link rel="stylesheet" href="geek.css" />
+  <meta name="theme-color" content="#020a10" />
+  <title>LEGACY — World Map</title>
+  <link rel="preload" as="image" href="./assets/screens/world-map.webp" />
+  <link rel="stylesheet" href="./image-ui.css" />
 </head>
-<body data-page="map">
-  <main class="world-shell">
-    <div class="world-toolbar">
-      <a href="./">‹ Back</a>
-      <div class="world-title"><div style="color:#ffc85c;font-size:22px">♛</div><h1>World Map</h1><p>EXPLORE · GROW · BUILD A BRIGHTER TOMORROW</p></div>
-      <button class="regions" type="button" data-fit>⚑ <span data-region-count>3 / 5</span> REGIONS</button>
-    </div>
-    <div class="map-help">Drag to explore · pinch/wheel to zoom · tap an island</div>
-    <div class="map-viewport" data-viewport aria-label="Interactive world map">
-      <div class="map-canvas" data-canvas>
-        <span class="path-node p1"></span><span class="path-node p2"></span><span class="path-node p3"></span><span class="path-node p4"></span><span class="path-node p5"></span>
-        <button class="island-hotspot island-foundation" type="button" data-phase="foundation"><span class="island-label"><strong>🌿 FOUNDATION</strong><small><span data-phase-pct="foundation">0</span>% COMPLETE</small></span></button>
-        <button class="island-hotspot island-health" type="button" data-phase="health"><span class="island-label"><strong>❤️ HEALTH</strong><small><span data-phase-pct="health">0</span>% COMPLETE</small></span></button>
-        <button class="island-hotspot island-career" type="button" data-phase="career"><span class="island-label"><strong>💼 CAREER</strong><small><span data-phase-pct="career">0</span>% COMPLETE</small></span></button>
-        <button class="island-hotspot island-wealth" type="button" data-phase="wealth"><span class="island-label"><strong>🪙 WEALTH</strong><small><span data-phase-pct="wealth">0</span>% COMPLETE</small></span></button>
-        <button class="island-hotspot island-legacy" type="button" data-phase="legacy"><span class="island-label"><strong>♛ LEGACY</strong><small><span data-phase-pct="legacy">0</span>% COMPLETE</small></span></button>
+<body>
+  <main class="screen-shell map-shell" aria-label="LEGACY World Map">
+    <img class="screen-img map-base" src="./assets/screens/world-map.webp" alt="LEGACY fantasy world map" />
+
+    <a class="hit map-back" href="./"><span class="hit-label">Back to Home</span></a>
+
+    <div class="map-crop" data-map-crop aria-label="Interactive map: drag to pan, wheel or pinch to zoom">
+      <div class="map-transform" data-map-transform>
+        <img class="screen-img" src="./assets/screens/world-map.webp" alt="" aria-hidden="true" />
+        <button class="map-hit map-foundation" type="button" data-phase="foundation" aria-label="Foundation Island"></button>
+        <button class="map-hit map-health" type="button" data-phase="health" aria-label="Health Island"></button>
+        <button class="map-hit map-career" type="button" data-phase="career" aria-label="Career Island"></button>
+        <button class="map-hit map-wealth" type="button" data-phase="wealth" aria-label="Wealth Island"></button>
+        <button class="map-hit map-legacy" type="button" data-phase="legacy" aria-label="Legacy Island"></button>
       </div>
     </div>
 
-    <section class="map-card">
-      <div class="map-card-main">
-        <div class="map-thumb" data-map-icon>💼</div>
-        <div><p class="pixel-kicker" data-map-theme>CITADEL</p><h2 data-map-title>Career</h2><p data-map-tagline>Build mastery and meaningful professional impact.</p></div>
-        <div><strong><span data-map-pct>0</span>%</strong><p>COMPLETE</p></div>
-      </div>
-      <a class="neon-cta" data-continue href="./island?phase=career">▶ Continue in Career</a>
-    </section>
+    <button class="hit map-reset-view" type="button" data-reset-map><span class="hit-label">Reset map view</span></button>
+    <button class="hit map-continue" type="button" data-continue><span class="hit-label">Continue in selected island</span></button>
+
+    <a class="hit map-home-nav" href="./"><span class="hit-label">Home</span></a>
+    <a class="hit map-map-nav" href="./goals-map"><span class="hit-label">World Map</span></a>
+    <a class="hit map-goals-nav" href="./island?phase=career"><span class="hit-label">Goals</span></a>
+    <a class="hit map-focus-nav" href="./focus"><span class="hit-label">Focus</span></a>
+    <button class="hit map-tasks-nav" type="button" data-tasks><span class="hit-label">Tasks</span></button>
+    <button class="hit map-journal-nav" type="button" data-journal><span class="hit-label">Journal</span></button>
+
+    <div class="hotspot-feedback" data-map-feedback style="left:34%;bottom:22%">Foundation selected</div>
+
+    <dialog class="ui-sheet" id="genericDialog" aria-labelledby="genericTitle">
+      <div class="sheet-head"><div><p>WORLD MAP</p><h2 id="genericTitle">Island</h2></div>
+        <form method="dialog"><button class="sheet-close" value="close" aria-label="Close">×</button></form></div>
+      <div class="sheet-body" data-generic-body></div>
+    </dialog>
   </main>
-  <script src="geek-state.js"></script>
-  <script src="world-map.js"></script>
+  <div class="toast" data-toast hidden></div>
+  <script src="./geek-state.js"></script>
+  <script src="./image-map.js"></script>
 </body>
 </html>
