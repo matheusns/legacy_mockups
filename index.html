@@ -3,111 +3,65 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#031b28" />
-  <title>LEGAVIA — Home</title>
-  <link rel="stylesheet" href="geek.css" />
+  <meta name="theme-color" content="#020a10" />
+  <title>LEGACY — Home</title>
+  <link rel="preload" as="image" href="./assets/screens/home.webp" />
+  <link rel="stylesheet" href="./image-ui.css" />
 </head>
-<body data-page="home">
-  <main class="app-frame">
-    <header class="hud-header">
-      <a class="brand-lockup" href="./" aria-label="LEGAVIA home">
-        <span class="brand-crown">♛</span><strong>LEGAVIA</strong>
-        <small>A BETTER YOU LEAVES A BRIGHTER TOMORROW</small>
-      </a>
-      <div class="hud-actions">
-        <button class="hud-icon" type="button" data-search aria-label="Search">⌕</button>
-        <button class="hud-icon" type="button" data-settings aria-label="Settings">⚙</button>
-        <button class="avatar-button" type="button" data-profile aria-label="Profile">
-          <span class="pixel-avatar">🧑🏻‍💻</span><small>Lv. <b data-level>12</b></small>
-        </button>
+<body>
+  <main class="screen-shell" aria-label="LEGACY Home">
+    <img class="screen-img" src="./assets/screens/home.webp" alt="LEGACY fantasy productivity dashboard" />
+
+    <button class="hit home-search" type="button" data-search><span class="hit-label">Search</span></button>
+    <button class="hit home-settings" type="button" data-settings><span class="hit-label">Settings</span></button>
+    <button class="hit home-profile" type="button" data-profile><span class="hit-label">Profile</span></button>
+    <button class="hit home-next" type="button" data-next><span class="hit-label">Open next best action</span></button>
+    <button class="hit home-hydration" type="button" data-water><span class="hit-label">Log one glass of water</span></button>
+    <a class="hit home-focus" href="./focus"><span class="hit-label">Open Focus Forest</span></a>
+    <a class="hit home-focus-start" href="./focus"><span class="hit-label">Start focus session</span></a>
+    <a class="hit home-map-open" href="./goals-map"><span class="hit-label">Open World Map</span></a>
+    <button class="hit home-task-add" type="button" data-add-task><span class="hit-label">Register new task</span></button>
+
+    <button class="hit home-task-1" type="button" data-task-row="0"><span class="hit-label">Toggle task one</span></button>
+    <button class="hit home-task-2" type="button" data-task-row="1"><span class="hit-label">Toggle task two</span></button>
+    <button class="hit home-task-3" type="button" data-task-row="2"><span class="hit-label">Toggle task three</span></button>
+    <button class="hit home-task-4" type="button" data-task-row="3"><span class="hit-label">Toggle task four</span></button>
+    <button class="hit home-task-5" type="button" data-task-row="4"><span class="hit-label">Toggle task five</span></button>
+
+    <a class="hit nav-home" href="./"><span class="hit-label">Home</span></a>
+    <a class="hit nav-map" href="./goals-map"><span class="hit-label">World Map</span></a>
+    <a class="hit nav-goals" href="./island?phase=career"><span class="hit-label">Goals</span></a>
+    <a class="hit nav-focus" href="./focus"><span class="hit-label">Focus</span></a>
+    <button class="hit nav-tasks" type="button" data-add-task><span class="hit-label">Tasks</span></button>
+    <button class="hit nav-journal" type="button" data-journal><span class="hit-label">Journal</span></button>
+
+    <dialog class="ui-sheet" id="taskDialog" aria-labelledby="taskDialogTitle">
+      <div class="sheet-head">
+        <div><p>REGISTER QUEST</p><h2 id="taskDialogTitle">New Task</h2></div>
+        <form method="dialog"><button class="sheet-close" value="close" aria-label="Close">×</button></form>
       </div>
-    </header>
-
-    <section class="home-hero pixel-panel">
-      <div class="hero-copy">
-        <p class="pixel-kicker">☀ TODAY</p>
-        <h1>Your Next<br><em>Best Action</em></h1>
-        <p>A focused step today builds your bigger tomorrow.</p>
-        <button class="next-action-card" type="button" data-open-next>
-          <span class="round-icon">◎</span>
-          <span><strong data-next-task>Work on Project Proposal</strong><small>Make progress for a future you're proud of.</small></span>
-          <b>›</b>
-        </button>
+      <div class="sheet-body">
+        <form class="sheet-form" id="taskForm">
+          <label>Task title<input id="taskTitle" required maxlength="90" placeholder="What moves the quest forward?" /></label>
+          <label>Island<select id="taskPhase"></select></label>
+          <label>Goal horizon<select id="taskHorizon"><option value="short">Short-term</option><option value="mid">Mid-term</option><option value="long">Long-term</option></select></label>
+          <label>Goal<select id="taskGoal"></select></label>
+          <label>Estimated focus<select id="taskFocus"><option value="25">25 min</option><option value="50">50 min</option><option value="90">90 min</option></select></label>
+          <button class="sheet-cta" type="submit">＋ Register New Task</button>
+        </form>
       </div>
-      <div class="hero-landscape" aria-hidden="true">
-        <div class="mountain m1"></div><div class="mountain m2"></div>
-        <div class="castle">♜</div><div class="hero-tree">♣</div>
-        <div class="quote-chip">SMALL STEPS<br>BUILD<br>EPIC LEGACIES.</div>
+    </dialog>
+
+    <dialog class="ui-sheet" id="genericDialog" aria-labelledby="genericTitle">
+      <div class="sheet-head">
+        <div><p>LEGACY</p><h2 id="genericTitle">Details</h2></div>
+        <form method="dialog"><button class="sheet-close" value="close" aria-label="Close">×</button></form>
       </div>
-    </section>
-
-    <section class="stats-row pixel-panel">
-      <div class="stat-character"><span class="pixel-avatar big">🧙🏻‍♂️</span><div><strong>Lv. <span data-level>12</span></strong><div class="xp-track"><i data-xp-bar></i></div><small><span data-xp>730</span> / 1,000 XP</small></div></div>
-      <div class="stat"><b>🔥 <span data-streak>21</span></b><small>Day Streak</small></div>
-      <div class="stat"><b>🪙 <span data-total-xp>2340</span></b><small>Total XP</small></div>
-      <div class="stat badge-stat"><b>⚔</b><small>DISCIPLINE<br>BUILDS FREEDOM.</small></div>
-    </section>
-
-    <section class="hydration-panel pixel-panel">
-      <div class="hydration-copy">
-        <p class="pixel-kicker">💧 HYDRATION</p>
-        <h2><span data-water-glasses>6</span> / 8 glasses</h2>
-        <div class="glass-row" data-glasses></div>
-        <small><span data-water-pct>75</span>% complete</small>
-      </div>
-      <div class="hydration-scene" aria-hidden="true"><span class="waterfall-icon">♣</span><p>A CLEAR MIND<br>FUELS A BIGGER YOU.</p></div>
-      <div class="hydration-actions">
-        <button type="button" data-water-minus>−</button><button type="button" data-water-plus>＋</button>
-      </div>
-    </section>
-
-    <section class="focus-preview pixel-panel">
-      <div class="focus-title"><span>🌿</span><div><h2>Focus Session</h2><p>Plant focus. Grow your forest.</p></div><a href="./focus">›</a></div>
-      <div class="focus-preview-grid">
-        <div class="mini-island"><span class="tree-sprite">🌳</span><b>Lv. <span data-forest-level>2</span></b></div>
-        <div class="timer-preview"><strong>25:00</strong><small>Pomodoro</small><a class="neon-cta" href="./focus">▶ Start Focus Session</a></div>
-      </div>
-    </section>
-
-    <section class="goals-banner pixel-panel">
-      <div class="map-scroll">🗺️</div>
-      <div><h2>Your Goals</h2><p>Explore the World Map.</p><small>Turn your dreams into a larger journey.</small></div>
-      <a class="gold-cta" href="./goals-map">Open World Map →</a>
-    </section>
-
-    <section class="tasks-panel pixel-panel">
-      <div class="panel-heading"><div><span class="blue-icon">☑</span><h2>Today's Tasks</h2></div><span><b data-task-summary>3 of 5</b> complete</span><button type="button" data-add-task aria-label="Register new task">＋</button></div>
-      <div class="task-progress"><i data-task-bar></i></div>
-      <div class="task-list" data-home-tasks></div>
-    </section>
-
-    <nav class="game-nav" aria-label="Primary navigation">
-      <a class="active" href="./"><span>⌂</span>Home</a>
-      <a href="./goals-map"><span>🗺</span>World Map</a>
-      <a href="./island?phase=career"><span>◎</span>Goals</a>
-      <a href="./focus"><span>🌿</span>Focus</a>
-      <button type="button" data-add-task><span>☑</span>Tasks</button>
-      <button type="button" data-journal><span>▤</span>Journal</button>
-    </nav>
+      <div class="sheet-body" data-generic-body></div>
+    </dialog>
   </main>
-
-  <dialog class="modal" id="taskDialog" aria-labelledby="taskDialogTitle">
-    <form method="dialog"><button class="modal-close" value="close" aria-label="Close">×</button></form>
-    <p class="pixel-kicker">REGISTER TASK</p><h2 id="taskDialogTitle">New Quest</h2>
-    <form class="quest-form" id="taskForm">
-      <label>Task title<input id="taskTitle" required maxlength="90" placeholder="What will move you forward?" /></label>
-      <label>Island<select id="taskPhase"></select></label>
-      <label>Goal horizon<select id="taskHorizon"><option value="short">Short-term</option><option value="mid">Mid-term</option><option value="long">Long-term</option></select></label>
-      <label>Link to goal<select id="taskGoal"></select></label>
-      <label>Estimated focus<select id="taskFocus"><option value="25">25 min</option><option value="50">50 min</option><option value="90">90 min</option></select></label>
-      <button class="neon-cta" type="submit">＋ Register New Task</button>
-    </form>
-  </dialog>
-
-  <dialog class="modal" id="genericDialog"><form method="dialog"><button class="modal-close" value="close">×</button></form><div data-generic-body></div></dialog>
   <div class="toast" data-toast hidden></div>
-
-  <script src="geek-state.js"></script>
-  <script src="geek-home.js"></script>
+  <script src="./geek-state.js"></script>
+  <script src="./image-home.js"></script>
 </body>
 </html>
