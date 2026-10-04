@@ -176,3 +176,66 @@ a.hit{display:block;text-decoration:none}
 @media (prefers-reduced-motion:reduce){
   *{scroll-behavior:auto!important;transition:none!important;animation:none!important}
 }
+
+
+/* 2026-10-05 weekly-use recovery: one raster background, deterministic hit geometry */
+.map-crop{
+  inset:0;height:auto;overflow:visible;touch-action:auto;cursor:default;pointer-events:none
+}
+.map-crop.dragging{cursor:default}
+.map-transform{
+  inset:0;width:100%;height:100%;top:0!important;transform:none!important;
+  transform-origin:50% 50%;will-change:auto;pointer-events:none
+}
+.map-transform>.screen-img{display:none}
+.map-hit{pointer-events:auto}
+.map-legacy{left:29%;top:9.5%;width:42%;height:13%}
+.map-foundation{left:9%;top:20.5%;width:40%;height:15%}
+.map-health{left:57%;top:27%;width:37%;height:14%}
+.map-career{left:8%;top:43%;width:45%;height:16%}
+.map-wealth{left:55%;top:47%;width:41%;height:15%}
+.map-reset-view{left:78.5%;top:1.2%;width:19.5%;height:5.2%}
+.map-continue{left:7%;top:83.3%;width:86%;height:5.4%}
+.map-home-nav,.map-map-nav,.map-goals-nav,.map-focus-nav,.map-tasks-nav,.map-journal-nav{
+  top:91.2%;height:8.8%;z-index:35;border-radius:0;color:#91afbe;
+  background:#031019;border-top:1px solid #123d50;display:grid;place-items:center;
+  font-size:0
+}
+.map-home-nav::after{content:"⌂\A HOME"}
+.map-map-nav::after{content:"◇\A MAP";color:var(--gold)}
+.map-goals-nav::after{content:"◎\A GOALS"}
+.map-focus-nav::after{content:"●\A FOCUS"}
+.map-tasks-nav::after{content:"☑\A TASKS"}
+.map-journal-nav::after{content:"▤\A JOURNAL"}
+.map-home-nav::after,.map-map-nav::after,.map-goals-nav::after,.map-focus-nav::after,.map-tasks-nav::after,.map-journal-nav::after{
+  white-space:pre;text-align:center;font-size:clamp(7px,1.5vw,10px);line-height:1.7
+}
+
+/* Re-aligned to the rebuilt Career Island background. */
+.island-tab-goals{top:25.0%;height:4.0%}
+.island-tab-overview{top:25.0%;height:4.0%}
+.island-tab-notes{top:25.0%;height:4.0%}
+.island-tab-resources{top:25.0%;height:4.0%}
+.island-long-1{top:39.2%;height:4.1%}
+.island-long-2{top:43.0%;height:4.1%}
+.island-long-3{top:46.7%;height:4.1%}
+.island-mid-1{top:56.7%;height:4.0%}
+.island-mid-2{top:60.5%;height:4.0%}
+.island-mid-subtasks{top:64.1%;height:3.9%}
+.island-add-goal{top:64.1%;height:3.9%}
+.island-short-1{top:73.6%;height:4.0%}
+.island-short-2{top:77.5%;height:4.0%}
+.island-short-3{top:81.3%;height:4.0%}
+.island-register{left:27%;top:86.7%;width:47%;height:4.0%}
+.island-nav-home,.island-nav-map,.island-nav-goals,.island-nav-focus,.island-nav-tasks,.island-nav-journal{top:91.4%;height:8.4%}
+
+/* Re-aligned to the rebuilt Focus Forest background. */
+.focus-mode-pomodoro{top:39.6%;height:4.6%}
+.focus-mode-short{top:39.6%;height:4.6%}
+.focus-mode-long{top:39.6%;height:4.6%}
+.focus-mode-custom{top:39.6%;height:4.6%}
+.focus-start{top:45.2%;height:5.2%}
+.focus-reset{top:45.2%;height:5.2%}
+.focus-current-task{left:3%;top:65.5%;width:59%;height:20%}
+.focus-history{left:63%;top:65.5%;width:34%;height:20%}
+.focus-mark{left:65%;top:86.5%;width:30%;height:3.8%}
