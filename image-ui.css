@@ -239,3 +239,9 @@ a.hit{display:block;text-decoration:none}
 .focus-current-task{left:3%;top:65.5%;width:59%;height:20%}
 .focus-history{left:63%;top:65.5%;width:34%;height:20%}
 .focus-mark{left:65%;top:86.5%;width:30%;height:3.8%}
+
+
+/* Lock the root scrolling element as well as body. All MVP screens are viewport compositions. */
+html{width:100%;height:100%;max-height:100dvh;overflow:hidden;overscroll-behavior:none}
+body{width:100%;height:100dvh;min-height:0;max-height:100dvh;overflow:hidden;overscroll-behavior:none}
+.screen-shell{flex:0 0 auto;max-height:100dvh}
